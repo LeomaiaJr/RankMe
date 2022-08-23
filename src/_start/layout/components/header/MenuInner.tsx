@@ -11,7 +11,7 @@ export function MenuInner() {
           <h3 className="fw-bolder mb-5">Dashboards</h3>
           <ul className="menu menu-column menu-fit menu-rounded menu-gray-600 menu-hover-primary menu-active-primary fw-bold fs-6 mb-10">
             <li className="menu-item">
-              <MenuItem to="/dashboard" title="Start" />
+              <MenuItem to="/home" title="Start" />
             </li>
             <li className="menu-item">
               <MenuItem to="/extended" title="Extended" free={true} />

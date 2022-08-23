@@ -18,7 +18,7 @@ const App: React.FC<Props> = ({ basename }) => {
       (token === undefined || token === '') &&
       !document.location.href.includes('auth/login')
     ) {
-      document.location.href = '/start-react-free/auth/login';
+      document.location.href = '/auth/login';
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.location.pathname]);

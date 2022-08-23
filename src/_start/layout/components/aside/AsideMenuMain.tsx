@@ -12,7 +12,7 @@ export function AsideMenuMain() {
               Dashboards
             </h4>
           </div>
-          <AsideMenuItem to="/dashboard" title="Start" />
+          <AsideMenuItem to="/home" title="Start" />
           <AsideMenuItem to="/extended" title="Extended" free={true} />
           <AsideMenuItem to="/light" title="Light" />
           <AsideMenuItem to="/compact" title="Compact" free={true} />

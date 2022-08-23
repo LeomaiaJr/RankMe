@@ -35,7 +35,7 @@ export function Login() {
             setLoading(false);
             console.log(data);
             sessionStorage.setItem('rankme-auth', JSON.stringify(data));
-            window.location.href = '/start-react-free/dashboard';
+            window.location.href = '/home';
           })
           .catch(() => {
             setLoading(false);
