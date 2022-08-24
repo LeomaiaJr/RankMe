@@ -3,6 +3,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import { FallbackView } from "../../_start/partials";
 import { LightDashboardWrapper } from "../pages/dashboards/light-dashboard/LightDashboardWrapper";
 import { StartDashboardWrapper } from "../pages/dashboards/start-dashboard/StartDashboardWrapper";
+import { HomePage } from "../pages/HomePage";
 import { MenuTestPage } from "../pages/MenuTestPage";
 
 export function PrivateRoutes() {
@@ -23,9 +24,10 @@ export function PrivateRoutes() {
         <Route path="/profile" component={ProfilePageWrapper} />
         <Route path="/menu-test" component={MenuTestPage} />
         <Route path="/docs" component={DocsPageWrapper} />
-        <Redirect from="/auth" to="/dashboard" />
-        <Redirect exact from="/" to="/dashboard" />
-        <Redirect to="dashboard" />
+        <Route path="/home" component={HomePage} />
+        <Redirect from="/auth" to="/home" />
+        <Redirect exact from="/" to="/home" />
+        <Redirect to="home" />
       </Switch>
     </Suspense>
   );
