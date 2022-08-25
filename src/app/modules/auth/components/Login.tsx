@@ -7,19 +7,19 @@ import { login } from '../redux/AuthCRUD';
 
 const loginSchema = Yup.object().shape({
   email: Yup.string()
-    .email('Wrong email format')
-    .min(3, 'Minimum 3 symbols')
-    .max(50, 'Maximum 50 symbols')
-    .required('Email is required'),
+    .email('Formato de email inválido')
+    .min(6, 'Mínimo 6 caracteres')
+    .max(100, 'Máximo de 100 caracteres')
+    .required('O email é obrigatório'),
   password: Yup.string()
-    .min(3, 'Minimum 3 symbols')
-    .max(50, 'Maximum 50 symbols')
-    .required('Password is required'),
+    .min(6, 'Mínimo 6 caracteres')
+    .max(100, 'Máximo de 100 caracteres')
+    .required('A senha é obrigatória'),
 });
 
 const initialValues = {
-  email: 'admin@demo.com',
-  password: 'demo',
+  email: 'admin@email.com',
+  password: '123456',
 };
 
 export function Login() {
@@ -40,7 +40,7 @@ export function Login() {
           .catch(() => {
             setLoading(false);
             setSubmitting(false);
-            setStatus('The login detail is incorrect');
+            setStatus('Email ou senha inválidos');
           });
       }, 1000);
     },
@@ -55,30 +55,23 @@ export function Login() {
     >
       {/* begin::Title */}
       <div className="pb-lg-15">
-        <h3 className="fw-bolder text-dark display-6">Welcome to Start</h3>
+        <h3 className="fw-bolder text-dark display-6">Bem-vindo</h3>
         <div className="text-muted fw-bold fs-3">
-          New Here?{' '}
+          Novo por aqui?{' '}
           <Link
             to="/auth/registration"
             className="text-primary fw-bolder"
             id="kt_login_signin_form_singup_button"
           >
-            Create Account
+            Criar conta
           </Link>
         </div>
       </div>
       {/* begin::Title */}
 
-      {formik.status ? (
+      {formik.status && (
         <div className="mb-lg-15 alert alert-danger">
           <div className="alert-text font-weight-bold">{formik.status}</div>
-        </div>
-      ) : (
-        <div className="mb-lg-15 alert alert-info">
-          <div className="alert-text ">
-            Use credentials <strong>admin@demo.com</strong> and{' '}
-            <strong>demo</strong> to sign in.
-          </div>
         </div>
       )}
 
@@ -114,13 +107,13 @@ export function Login() {
             Password
           </label>
 
-          <Link
+          {/* <Link
             to="/auth/forgot-password"
             className="text-primary fs-6 fw-bolder text-hover-primary pt-5"
             id="kt_login_signin_form_password_reset_button"
           >
             Forgot Password ?
-          </Link>
+          </Link> */}
         </div>
         <input
           type="password"
@@ -152,7 +145,7 @@ export function Login() {
           className="btn btn-primary fw-bolder fs-6 px-8 py-4 my-3 me-3"
           disabled={formik.isSubmitting || !formik.isValid}
         >
-          {!loading && <span className="indicator-label">Sign In</span>}
+          {!loading && <span className="indicator-label">Entrar</span>}
           {loading && (
             <span className="indicator-progress" style={{ display: 'block' }}>
               Please wait...{' '}
