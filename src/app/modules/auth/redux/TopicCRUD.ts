@@ -7,3 +7,7 @@ export function createTopic(data: any) {
 export function deleteTopic(id: string) {
   return api.delete(`/topics/${id}`);
 }
+
+export function getTopic(id: string) {
+  return api.get(`/topics/`,  { params: { id } });
+}
