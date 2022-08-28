@@ -3,6 +3,7 @@ import { KTSVG } from "../../_start/helpers";
 import { createClass, deleteClass } from "../modules/auth/redux/ClassCRUD";
 import { getTeacherClasses, getUserBy } from "../modules/auth/redux/UserCRUD";
 import { getAuthUserData } from "../../util/auth";
+import { Link } from "react-router-dom";
 
 export function HomePage() {
   const [loading, setLoading] = useState(true);
@@ -85,13 +86,15 @@ export function HomePage() {
                         Alunos: {classItem.students.length}
                       </div>
                       <div className="card-footer mx-auto">
-                        <button
-                          type="button"
-                          className="btn btn-active-success "
-                          style={{ margin: 5 }}
-                        >
-                          <i className="bi bi-eyeglasses text-dark fs-2x"></i>
-                        </button>
+                        <Link to={`/class/${classItem.id}`}>
+                          <button
+                            type="button"
+                            className="btn btn-active-success "
+                            style={{ margin: 5 }}
+                          >
+                            <i className="bi bi-eyeglasses text-dark fs-2x"></i>
+                          </button>
+                        </Link>
                         <button
                           type="button"
                           className="btn btn-active-danger "
@@ -149,7 +152,7 @@ export function HomePage() {
             </div>
             <div className="modal-body">
               <input
-                type="email"
+                type="text"
                 value={newClassName}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
