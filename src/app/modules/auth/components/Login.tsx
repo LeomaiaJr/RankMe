@@ -104,7 +104,7 @@ export function Login() {
       <div className="fv-row mb-10 fv-plugins-icon-container">
         <div className="d-flex justify-content-between mt-n5">
           <label className="form-label fs-6 fw-bolder text-dark pt-5">
-            Password
+            Senha
           </label>
 
           {/* <Link

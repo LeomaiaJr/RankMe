@@ -22,7 +22,6 @@ export function Toolbar() {
               {/* begin::Title */}
               {pageTitle && (
                 <h3 className="text-dark fw-bolder my-1">
-                  {pageTitle}&nbsp;
                   {pageDescription && (
                     <span className="text-muted fs-7 fw-bold ms-1">
                       {pageDescription}
@@ -52,7 +51,7 @@ export function Toolbar() {
                           </Link>
                         </li>
                       ))}
-                      <li className="breadcrumb-item text-dark">{pageTitle}</li>
+                      <li className="breadcrumb-item text-dark">Perfil</li>
                     </ul>
                     {/* end::Breadcrumbs */}
                   </>
@@ -62,16 +61,6 @@ export function Toolbar() {
 
             {pageSubmenu && pageSubmenu.length > 0 && (
               <div className="d-flex align-items-center flex-nowrap text-nowrap overflow-auto py-1">
-                {Array.from(pageSubmenu).map((item, index) => (
-                  <NavLink
-                    className="btn btn-active-accent fw-bolder ms-3"
-                    to={item.isPro ? "#" : item.path}
-                    activeClassName={item.isPro ? "" : "active"}
-                    key={`${item.path}${index}`}
-                  >
-                    {item.title}
-                  </NavLink>
-                ))}
               </div>
             )}
           </div>

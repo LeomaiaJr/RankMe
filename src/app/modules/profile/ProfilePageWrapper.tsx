@@ -12,13 +12,8 @@ import { ProfilePage } from "./ProfilePage";
 
 const profileBreadCrumbs: Array<PageLink> = [
   {
-    title: "Home",
+    title: "Dashboards",
     path: "/",
-    isActive: false,
-  },
-  {
-    title: "Profile",
-    path: "",
     isActive: false,
   },
 ];
