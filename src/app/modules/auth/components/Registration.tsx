@@ -144,7 +144,7 @@ export function Registration() {
           Nome completo
         </label>
         <input
-          placeholder="First name"
+          placeholder="Nome completo"
           type="text"
           autoComplete="off"
           {...formik.getFieldProps('name')}

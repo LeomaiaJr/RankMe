@@ -1,17 +1,14 @@
 import React, { useState } from "react";
 import { KTSVG } from "../../../helpers";
 import {
-  HeaderNotificationsMenu,
   SearchModal,
   HeaderUserMenu,
-  InboxCompose,
 } from "../../../partials";
 import { useTheme } from "../../core";
 
 export function Topbar() {
   const { config } = useTheme();
   const [showSearchModal, setShowSearchModal] = useState(false);
-  const [showInboxComposeModal, setShowInboxComposeModal] = useState(false);
 
   return (
     <>
@@ -31,22 +28,6 @@ export function Topbar() {
       />
       {/* end::Search */}
 
-      {/* begin::Message */}
-      <button
-        className="btn btn-icon btn-sm btn-active-bg-accent ms-1 ms-lg-6"
-        onClick={() => setShowInboxComposeModal(true)}
-      >
-        <KTSVG
-          path="/media/icons/duotone/Communication/Chat6.svg"
-          className="svg-icon-1 svg-icon-dark"
-        />
-      </button>
-      <InboxCompose
-        show={showInboxComposeModal}
-        handleClose={() => setShowInboxComposeModal(false)}
-      />
-      {/* end::Message */}
-
       {/* begin::User */}
       <div className="ms-1 ms-lg-6">
         {/* begin::Toggle */}
@@ -64,21 +45,6 @@ export function Topbar() {
         {/* end::Toggle */}
       </div>
       {/* end::User */}
-
-      {/* begin::Notifications */}
-      <div className="ms-1 ms-lg-6">
-        {/* begin::Dropdown */}
-        <button
-          className="btn btn-icon btn-sm btn-light-danger fw-bolder pulse pulse-danger"
-          data-kt-menu-trigger="click"
-          data-kt-menu-placement="bottom-end"
-        >
-          <span className="position-absolute fs-6">3</span>
-          <span className="pulse-ring"></span>
-        </button>
-        <HeaderNotificationsMenu />
-        {/* end::Dropdown */}
-      </div>
       {/* end::Notifications */}
 
       {/* begin::Aside Toggler */}

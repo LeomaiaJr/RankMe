@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { KTSVG, toAbsoluteUrl } from "../../../helpers";
+import { KTSVG } from "../../../helpers";
 import { MenuModal } from "../../../partials";
 import { usePageData, useTheme } from "../../core";
 import { MenuInner } from "./MenuInner";
@@ -66,11 +66,10 @@ export function Header() {
 
               {/* begin::Logo */}
               <Link to="/">
-                <img
-                  alt="Logo"
-                  src={toAbsoluteUrl("/media/logos/logo-default.svg")}
-                  className="h-30px"
-                />
+                <span
+                    className="fw-bolder fs-1 d-block">
+                  RankMe
+                </span>
               </Link>
               {/* end::Logo */}
             </>

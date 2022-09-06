@@ -2,7 +2,7 @@
   "name": "rank-me",
   "version": "1.0.0",
   "private": true,
-  "homepage": "/start-react-free/",
+  "homepage": "/",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.1",
     "@manaflair/redux-batch": "^1.0.0",
