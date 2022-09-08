@@ -5,11 +5,22 @@ import { KTSVG, toAbsoluteUrl } from "../../../helpers";
 import { Dropdown1 } from "../../content/dropdown/Dropdown1";
 import { getCSS } from "../../../assets/ts/_utils";
 import { getAuthUserData } from "../../../../util/auth";
+import { getUserAnalytics } from "../../../../app/modules/auth/redux/UserCRUD";
 export function SidebarUser() {
   const chartRef = useRef<HTMLDivElement | null>(null);
   const [user, setUser]: any = useState(getAuthUserData());
+  const [userAnalytics, setUserAnalytics]: any = useState({});
 
   useEffect(() => {
+
+    setTimeout(async () => {
+      await getUserAnalytics(user.id).then((res) => {
+        setUserAnalytics(res.data);
+        console.log(res.data);
+      }).catch((err) => {
+        console.log(err);
+      });
+    })
     if (!chartRef.current) {
       return;
     }
@@ -40,7 +51,7 @@ export function SidebarUser() {
         <div className="card card-custom bg-info">
           {/* begin::Body */}
           <div className="card-body px-0">
-            <div className="pt-10"> 
+            <div className="pt-10">
               {/* begin::Chart */}
               <div
                 className="d-flex flex-center position-relative bgi-no-repeat bgi-size-contain bgi-position-x-center bgi-position-y-center pt-10"
@@ -84,7 +95,7 @@ export function SidebarUser() {
                   </span>
                 </div>
                 {/* end::Title */}
-                
+
                 {/* begin::Row */}
                 <div className="row row-cols-2 px-xl-12 sidebar-toolbar">
                   <div className="col p-3">
@@ -93,10 +104,11 @@ export function SidebarUser() {
                       className="btn  p-5 w-100 text-start btn-active-primary"
                     >
                       <span className="text-white fw-bolder fs-1 d-block pb-1">
-                        38
+                      {user?.type !== "student" && (<span className="fw-bold">{userAnalytics?.classesUserIsTeacher}</span>)}
+                      {user?.type === "student" && (<span className="fw-bold">{userAnalytics?.classesUserIsStudent}</span>)}
                       </span>
-                      {user?.type!=="student" &&(<span className="fw-bold">Turmas totais</span>)}
-                      {user?.type==="student" &&(<span className="fw-bold fs-7">Turmas matriculadas</span>)}
+                      {user?.type !== "student" && (<span className="fw-bold">Turmas totais</span>)}
+                      {user?.type === "student" && (<span className="fw-bold fs-7">Turmas matriculadas</span>)}
                     </a>
                   </div>
 
@@ -106,10 +118,11 @@ export function SidebarUser() {
                       className="btn  p-5 w-100 text-start btn-active-primary"
                     >
                       <span className="text-white fw-bolder fs-1 d-block pb-1">
-                        204
+                      {user?.type !== "student" && (<span className="fw-bold">{userAnalytics?.teacherQuestions}</span>)}
+                      {user?.type === "student" && (<span className="fw-bold">{userAnalytics?.studentAnswers}</span>)}
                       </span>
-                      {user?.type!=="student" &&(<span className="fw-bold">Turmas criadas</span>)}
-                      {user?.type==="student" &&(<span className="fw-bold">Respostas enviadas</span>)}
+                      {user?.type !== "student" && (<span className="fw-bold">Turmas criadas</span>)}
+                      {user?.type === "student" && (<span className="fw-bold">Respostas enviadas</span>)}
                     </a>
                   </div>
                 </div>
