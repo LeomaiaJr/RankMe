@@ -26,7 +26,7 @@ const questionSchema = Yup.object()
     option_d: Yup.string()
       .max(100, "Máximo de 100 caracteres")
       .required("A opção D é obrigatória"),
-    correct_answer: Yup.string(),
+    correct_option: Yup.string(),
   })
   .required("A pergunta é obrigatória");
 
@@ -36,7 +36,7 @@ const initialValues = {
   option_b: "",
   option_c: "",
   option_d: "",
-  correct_answer: "",
+  correct_option: "",
   topic: "id",
 };
 
@@ -53,7 +53,7 @@ export function TopicPage() {
     onSubmit: (values, { setStatus, setSubmitting }) => {
       if (correctAnswer !== "") {
         values.topic = id;
-        values.correct_answer = correctAnswer;
+        values.correct_option = correctAnswer;
         setLoading(true);
         setTimeout(() => {
           createQuestion(values)
@@ -65,7 +65,6 @@ export function TopicPage() {
               setLoading(false);
               setSubmitting(false);
               setStatus("Verificar o preenchimento dos campos");
-              console.log(error);
             });
         }, 1000);
       } else {
@@ -453,10 +452,10 @@ export function TopicPage() {
                   </tr>
                 </tbody>
               </table>
-              {formik.touched.correct_answer && formik.errors.correct_answer && (
+              {formik.touched.correct_option && formik.errors.correct_option && (
                 <div className="fv-plugins-message-container">
                   <div className="fv-help-block">
-                    {formik.errors.correct_answer}
+                    {formik.errors.correct_option}
                   </div>
                 </div>
               )}

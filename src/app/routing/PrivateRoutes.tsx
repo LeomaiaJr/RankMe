@@ -7,6 +7,7 @@ import { LightDashboardWrapper } from "../pages/dashboards/light-dashboard/Light
 import { StartDashboardWrapper } from "../pages/dashboards/start-dashboard/StartDashboardWrapper";
 import { HomePage } from "../pages/HomePage";
 import { MenuTestPage } from "../pages/MenuTestPage";
+import { QuestionPage } from "../pages/QuestionPage";
 
 export function PrivateRoutes() {
   const ProfilePageWrapper = lazy(
@@ -29,6 +30,7 @@ export function PrivateRoutes() {
         <Route path="/home" component={HomePage} />
         <Route path="/class/:id" component={ClassPage} />
         <Route path="/topic/:id" component={TopicPage} />
+        <Route path="/question/:id" component={QuestionPage} />
         <Redirect from="/auth" to="/home" />
         <Redirect exact from="/" to="/home" />
         <Redirect to="home" />
