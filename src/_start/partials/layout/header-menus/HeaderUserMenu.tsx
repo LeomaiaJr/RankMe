@@ -31,7 +31,7 @@ export function HeaderUserMenu() {
         <div className="">
           <span className="text-white fw-bolder fs-4">Olá, {user?.name}</span>
           <span className="text-white fw-bold fs-7 d-block">
-            {user?.type === "STUDENT" ? "Aluno" : "Professor"}
+            {user?.type === "student" ? "aluno" : "professor"}
           </span>
         </div>
       </div>

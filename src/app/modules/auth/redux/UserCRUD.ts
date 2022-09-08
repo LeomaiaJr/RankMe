@@ -15,3 +15,9 @@ export function getTeacherClasses(id: string) {
     params: { id: id },
   });
 }
+
+export function getUserAnalytics(id: string){
+  return instance.get(`${GET_USER_BY_URL}/analytics`, {
+    params: { id: id },
+  });
+}
