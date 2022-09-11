@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { getAuthUserData } from "../../util/auth";
 import { Link, useParams } from "react-router-dom";
 import { KTSVG } from "../../_start/helpers";
 import { getTopic } from "../modules/auth/redux/TopicCRUD";
-import { createQuestion, deleteQuestion } from "../modules/auth/redux/QuestionCRUD";
+import {
+  createQuestion,
+  deleteQuestion,
+  getQuestionsAvailable,
+  studentCanAnswer,
+} from "../modules/auth/redux/QuestionCRUD";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import clsx from "clsx";
@@ -47,6 +52,8 @@ export function TopicPage() {
   const [user, setUser]: any = useState(getAuthUserData());
   const [topic, setTopic]: any = useState();
   const [correctAnswer, setCorrectAnswer] = useState("");
+  const [questionsAvailable, setQuestionsAvailable] = useState([]);
+
   const formik = useFormik({
     initialValues,
     validationSchema: questionSchema,
@@ -75,16 +82,30 @@ export function TopicPage() {
   useEffect(() => {
     const fetchTopic = async () => {
       await getTopic(id)
-        .then(({ data }) => {
+        .then(async ({ data }) => {
           setTopic(data[0]);
+          if (user.type !== "teacher") {
+            await fetchQuestionsAvailable(data[0].class.id);
+          } else {
+            setQuestionsAvailable(data[0].questions);
+          }
+        })
+        .catch((error) => {});
+    };
+
+    const fetchQuestionsAvailable = async (classId: string) => {
+      await getQuestionsAvailable({ id: classId })
+        .then(({ data }) => {
+          setQuestionsAvailable(data);
         })
         .catch((error) => {});
     };
 
     setTimeout(async () => {
       await fetchTopic();
+
       setLoading(false);
-    }, 100);
+    }, 10);
   }, [id]);
 
   const handleDeleteQuestion = async (id: string) => {
@@ -117,7 +138,9 @@ export function TopicPage() {
                 {topic ? (
                   <div>
                     <h1>{topic?.name}</h1>
-                    <p>{topic?.class?.name}</p>
+                    <Link to={`/class/${topic?.class?.id}`}>
+                      <p>{topic?.class?.name}</p>
+                    </Link>
                   </div>
                 ) : null}
               </div>
@@ -125,8 +148,8 @@ export function TopicPage() {
             </div>
             <div className="topics">
               <div className="row g-5" style={{ minHeight: 100 }}>
-                {topic.questions.length > 0
-                  ? topic.questions.map((question: any) => {
+                {questionsAvailable?.length > 0
+                  ? questionsAvailable.map((question: any) => {
                       return (
                         <div className="col-lg-4" key={question.id}>
                           <div className="card card-custom card-stretch-100 shadow mb-5">
@@ -140,28 +163,93 @@ export function TopicPage() {
                                 whiteSpace: "normal",
                               }}
                             >
-                              <p>{question.question_text.length > 30 ? (question.question_text.substring(0, 30) + '...') : question.question_text.concat(['\t\t\t\t\t\t'])}</p>
+                              <p>
+                                {question.question_text.length > 30
+                                  ? question.question_text.substring(0, 30) +
+                                    "..."
+                                  : question.question_text.concat([
+                                      "\t\t\t\t\t\t",
+                                    ])}
+                              </p>
                             </div>
                             <div className="card-footer mx-auto">
-                              <Link to={`/question/${question.id}`}>
+                              {topic?.available_to_answer ? (
                                 <button
+                                  id={`question-${question.id}`}
+                                  title="Responder"
                                   type="button"
-                                  className="btn btn-active-success "
+                                  className="btn btn-active-primary "
                                   style={{ margin: 5 }}
+                                  onClick={() => {
+                                    if (user.type === "teacher") {
+                                      window.location.href = `/question/${question.id}`;
+                                    } else {
+                                      document
+                                        .getElementById(
+                                          `question-${question.id}`
+                                        )
+                                        ?.setAttribute(
+                                          "data-kt-indicator",
+                                          "on"
+                                        );
+
+                                      setTimeout(async () => {
+                                        if (
+                                          await studentCanAnswer({
+                                            student: user.id,
+                                            question: question.id,
+                                          })
+                                            .then(({ data }) => {
+                                              return data;
+                                            })
+                                            .catch((error) => {
+                                              return false;
+                                            })
+                                        ) {
+                                          window.location.href = `/question/${question.id}`;
+                                        }
+                                        setTimeout(() => {
+                                          document
+                                            .getElementById(
+                                              `question-${question.id}`
+                                            )
+                                            ?.removeAttribute(
+                                              "data-kt-indicator"
+                                            );
+
+                                          document
+                                            .getElementById(
+                                              `question-${question.id}`
+                                            )
+                                            ?.setAttribute(
+                                              "title",
+                                              "Essa pergunta não está disponível para você responder"
+                                            );
+                                        }, 3000);
+                                      });
+                                    }
+                                  }}
                                 >
+                                  <span className="indicator-label"></span>
+                                  <span className="indicator-progress">
+                                    Aguarde...
+                                    <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                  </span>
                                   <i className="bi bi-pencil-square text-dark fs-2x"></i>
                                 </button>
-                              </Link>
-                              <button
-                                type="button"
-                                className="btn btn-active-danger "
-                                style={{ margin: 5 }}
-                                onClick={() =>
-                                  handleDeleteQuestion(question.id)
-                                }
-                              >
-                                <i className="bi bi-trash3 text-dark fs-2x"></i>
-                              </button>
+                              ) : null}
+                              {user.type === "teacher" && (
+                                <button
+                                  type="button"
+                                  className="btn btn-active-danger "
+                                  style={{ margin: 5 }}
+                                  onClick={() =>
+                                    handleDeleteQuestion(question.id)
+                                  }
+                                >
+                                  <i className="bi bi-trash3 text-dark fs-2x"></i>
+                                </button>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -186,9 +274,7 @@ export function TopicPage() {
                       </div>
                     </div>
                   </div>
-                ) : (
-                  <p>{user?.type ?? "-"}</p>
-                )}
+                ) : null}
               </div>
             </div>
           </div>

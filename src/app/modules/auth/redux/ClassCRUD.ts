@@ -12,3 +12,14 @@ export function deleteClass(id: string) {
 export function getClass(id: string) {
   return instance.get(`/classes`, { params: { id } });
 }
+
+export function getClassByString(query: string) {
+  return instance
+    .get(`/classes/by-string`, { params: { text: query } })
+    .then((res) => res.data)
+    .catch((err) => err);
+}
+
+export function addStudents(classId: string, studentId: string) {
+  return instance.post("/classes/addStudents", { classId, students: [studentId] });
+}

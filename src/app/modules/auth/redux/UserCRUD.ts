@@ -21,3 +21,9 @@ export function getUserAnalytics(id: string){
     params: { id: id },
   });
 }
+
+export function getStudentClasses(id: string) {
+  return instance.get(`${GET_USER_BY_URL}/student-classes`, {
+    params: { id: id },
+  });
+}
