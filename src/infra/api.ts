@@ -20,7 +20,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.response.status === 401) {
       sessionStorage.removeItem('rankme-auth');
-      document.location.href = '/start-react-free/auth/login';
+      document.location.href = '/auth/login';
     }
 
     return Promise.reject(error);

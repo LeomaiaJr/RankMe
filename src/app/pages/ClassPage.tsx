@@ -10,6 +10,7 @@ import {
   makeResultsAvailable,
   openTopic,
 } from "../modules/auth/redux/TopicCRUD";
+import { userHasClass } from "../modules/auth/redux/UserCRUD";
 
 export function ClassPage() {
   const { id } = useParams<{ id: string }>();
@@ -20,6 +21,18 @@ export function ClassPage() {
   const [newTopicName, setNewTopicName] = useState("");
 
   useEffect(() => {
+    setTimeout(async () => {
+      await userHasClass(user.id, id)
+        .then(({ data }) => {
+          if (!data) {
+            window.location.href = "/home";
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }, 1);
+
     const fetchClass = async () => {
       await getClass(id)
         .then(({ data }) => {
@@ -135,27 +148,36 @@ export function ClassPage() {
                                     </button>
                                   )}
                                   <button
-                                      type="button"
-                                      className="btn btn-active-primary "
-                                      style={{ margin: 5 }}
-                                      onClick={() => {
-                                        setTimeout(async () => {
-                                          await makeResultsAvailable(topic.id)
-                                            .then(({ data }) => {
-                                              window.location.reload();
-                                            })
-                                            .catch((error) => {
-                                              console.log(error);
-                                            });
-                                        });
-                                      }}
-                                    >
-                                      <i className={`bi ${!topic.results_available ? 'bi-send-check' : 'bi-send-slash'} text-dark fs-2x`}></i>
-                                      <span className="text-dark fw-bolder">
-                                        {" "}
-                                        {!topic.results_available ? 'Disponibilizar' : 'Retirar'} Resultados
-                                      </span>
-                                    </button>
+                                    type="button"
+                                    className="btn btn-active-primary "
+                                    style={{ margin: 5 }}
+                                    onClick={() => {
+                                      setTimeout(async () => {
+                                        await makeResultsAvailable(topic.id)
+                                          .then(({ data }) => {
+                                            window.location.reload();
+                                          })
+                                          .catch((error) => {
+                                            console.log(error);
+                                          });
+                                      });
+                                    }}
+                                  >
+                                    <i
+                                      className={`bi ${
+                                        !topic.results_available
+                                          ? "bi-send-check"
+                                          : "bi-send-slash"
+                                      } text-dark fs-2x`}
+                                    ></i>
+                                    <span className="text-dark fw-bolder">
+                                      {" "}
+                                      {!topic.results_available
+                                        ? "Disponibilizar"
+                                        : "Retirar"}{" "}
+                                      Resultados
+                                    </span>
+                                  </button>
                                 </div>
                               ) : null}
                             </div>

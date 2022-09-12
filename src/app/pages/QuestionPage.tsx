@@ -87,7 +87,7 @@ export function QuestionPage() {
         .then(({ data }) => {
           setQuestion(data[0]);
           setCorrectOption(data[0].correct_option);
-
+          fetchTopic(data[0].topic);
           formik.setValues({
             ...data[0],
           });
@@ -95,8 +95,8 @@ export function QuestionPage() {
         .catch((error) => {});
     };
 
-    const fetchTopic = async () => {
-      await getTopic(question?.topicId)
+    const fetchTopic = async (topic: any) => {
+      await getTopic(topic)
         .then(({ data }) => {
           setTopic(data[0]);
         })
@@ -105,7 +105,6 @@ export function QuestionPage() {
 
     setTimeout(async () => {
       await fetchQuestion();
-      await fetchTopic();
       setLoading(false);
     }, 100);
   }, [id]);
