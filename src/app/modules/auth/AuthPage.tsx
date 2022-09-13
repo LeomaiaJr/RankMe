@@ -20,17 +20,16 @@ export function AuthPage() {
         id="kt_login"
       >
         {/* Aside */}
-        <div className="d-flex flex-column flex-lg-row-auto bg-primary w-lg-600px pt-15 pt-lg-0">
-          {/* Top */}
-          <div className="d-flex flex-column-auto flex-column pt-lg-40 pt-15 text-center">
-            <Link to="/" className="mb-6">
-              <h3 className="fw-bolder fs-4x text-white lh-lg">
-                RankMe
-              </h3>
-            </Link>
-          </div>
-
-          {/* Bottom */}
+        <div className="d-flex flex-column flex-lg-row-auto bg-primary w-lg-600px">
+          <div
+            className="d-flex flex-row-fluid bgi-size-contain bgi-no-repeat bgi-position-y-center bgi-position-x-center mh-300px"
+            style={{
+              backgroundImage: `url('${toAbsoluteUrl(
+                "/media/svg/rankme/logo_roxa.svg"
+              )}')`,
+              marginTop: "100px",
+            }}
+          ></div>
           <div
             className="d-flex flex-row-fluid bgi-size-contain bgi-no-repeat bgi-position-y-bottom bgi-position-x-center min-h-350px"
             style={{
