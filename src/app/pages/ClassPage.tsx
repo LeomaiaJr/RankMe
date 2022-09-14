@@ -3,7 +3,14 @@ import { getClass } from "../modules/auth/redux/ClassCRUD";
 import { getAuthUserData } from "../../util/auth";
 import { Link, useParams } from "react-router-dom";
 import { KTSVG } from "../../_start/helpers";
-import { createTopic, deleteTopic } from "../modules/auth/redux/TopicCRUD";
+import {
+  closeTopic,
+  createTopic,
+  deleteTopic,
+  makeResultsAvailable,
+  openTopic,
+} from "../modules/auth/redux/TopicCRUD";
+import { userHasClass } from "../modules/auth/redux/UserCRUD";
 
 export function ClassPage() {
   const { id } = useParams<{ id: string }>();
@@ -14,6 +21,18 @@ export function ClassPage() {
   const [newTopicName, setNewTopicName] = useState("");
 
   useEffect(() => {
+    setTimeout(async () => {
+      await userHasClass(user.id, id)
+        .then(({ data }) => {
+          if (!data) {
+            window.location.href = "/home";
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }, 1);
+
     const fetchClass = async () => {
       await getClass(id)
         .then(({ data }) => {
@@ -78,25 +97,113 @@ export function ClassPage() {
                             <div className="card-header">
                               <h3 className="card-title">{topic.name}</h3>
                             </div>
-
+                            <div className="card-body mx-auto">
+                              {user.type === "teacher" ? (
+                                <div className="mx-auto">
+                                  {!topic.available_to_answer ? (
+                                    <button
+                                      type="button"
+                                      className="btn btn-active-primary mx-auto"
+                                      style={{ margin: 5 }}
+                                      onClick={() => {
+                                        setTimeout(async () => {
+                                          await openTopic(topic.id)
+                                            .then(({ data }) => {
+                                              window.location.reload();
+                                            })
+                                            .catch((error) => {
+                                              console.log(error);
+                                            });
+                                        });
+                                      }}
+                                    >
+                                      <i className="bi bi-eye text-dark fs-2x"></i>
+                                      <span className="text-dark fw-bolder">
+                                        {" "}
+                                        Abrir
+                                      </span>
+                                    </button>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      className="btn btn-active-primary "
+                                      style={{ margin: 5 }}
+                                      onClick={() => {
+                                        setTimeout(async () => {
+                                          await closeTopic(topic.id)
+                                            .then(({ data }) => {
+                                              window.location.reload();
+                                            })
+                                            .catch((error) => {
+                                              console.log(error);
+                                            });
+                                        });
+                                      }}
+                                    >
+                                      <i className="bi bi-eye-slash text-dark fs-2x"></i>
+                                      <span className="text-dark fw-bolder">
+                                        {" "}
+                                        Fechar
+                                      </span>
+                                    </button>
+                                  )}
+                                  <button
+                                    type="button"
+                                    className="btn btn-active-primary "
+                                    style={{ margin: 5 }}
+                                    onClick={() => {
+                                      setTimeout(async () => {
+                                        await makeResultsAvailable(topic.id)
+                                          .then(({ data }) => {
+                                            window.location.reload();
+                                          })
+                                          .catch((error) => {
+                                            console.log(error);
+                                          });
+                                      });
+                                    }}
+                                  >
+                                    <i
+                                      className={`bi ${
+                                        !topic.results_available
+                                          ? "bi-send-check"
+                                          : "bi-send-slash"
+                                      } text-dark fs-2x`}
+                                    ></i>
+                                    <span className="text-dark fw-bolder">
+                                      {" "}
+                                      {!topic.results_available
+                                        ? "Disponibilizar"
+                                        : "Retirar"}{" "}
+                                      Resultados
+                                    </span>
+                                  </button>
+                                </div>
+                              ) : null}
+                            </div>
                             <div className="card-footer mx-auto">
-                              <Link to={`/topic/${topic.id}`}>
+                              {(topic.available_to_answer ||
+                                user.type === "teacher") && (
+                                <Link to={`/topic/${topic.id}`}>
+                                  <button
+                                    type="button"
+                                    className="btn btn-active-primary "
+                                    style={{ margin: 5 }}
+                                  >
+                                    <i className="bi bi-pencil-square text-dark fs-2x"></i>
+                                  </button>
+                                </Link>
+                              )}
+                              {user.type === "teacher" && (
                                 <button
                                   type="button"
-                                  className="btn btn-active-success "
+                                  className="btn btn-active-danger "
                                   style={{ margin: 5 }}
+                                  onClick={() => handleDeleteTopic(topic.id)}
                                 >
-                                  <i className="bi bi-pencil-square text-dark fs-2x"></i>
+                                  <i className="bi bi-trash3 text-dark fs-2x"></i>
                                 </button>
-                              </Link>
-                              <button
-                                type="button"
-                                className="btn btn-active-danger "
-                                style={{ margin: 5 }}
-                                onClick={() => handleDeleteTopic(topic.id)}
-                              >
-                                <i className="bi bi-trash3 text-dark fs-2x"></i>
-                              </button>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -112,7 +219,7 @@ export function ClassPage() {
                       <div className="card-body mx-auto">
                         <button
                           type="button"
-                          className="btn btn-active-secondary center"
+                          className="btn btn-active-primary center"
                           data-bs-toggle="modal"
                           data-bs-target="#kt_modal_1"
                         >
@@ -121,9 +228,7 @@ export function ClassPage() {
                       </div>
                     </div>
                   </div>
-                ) : (
-                  <p>{user?.type ?? "-"}</p>
-                )}
+                ) : null}
               </div>
             </div>
           </div>

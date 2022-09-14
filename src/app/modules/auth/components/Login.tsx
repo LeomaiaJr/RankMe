@@ -33,7 +33,6 @@ export function Login() {
         login(values.email, values.password)
           .then(({ data }) => {
             setLoading(false);
-            console.log(data);
             sessionStorage.setItem('rankme-auth', JSON.stringify(data));
             window.location.href = '/home';
           })

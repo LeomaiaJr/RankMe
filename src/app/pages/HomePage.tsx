@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { KTSVG } from "../../_start/helpers";
 import { createClass, deleteClass } from "../modules/auth/redux/ClassCRUD";
-import { getTeacherClasses, getUserBy } from "../modules/auth/redux/UserCRUD";
+import {
+  getStudentClasses,
+  getTeacherClasses,
+  getUserBy,
+} from "../modules/auth/redux/UserCRUD";
 import { getAuthUserData } from "../../util/auth";
 import { Link } from "react-router-dom";
 
@@ -41,6 +45,14 @@ export function HomePage() {
           .catch((error) => {
             console.log(error);
           });
+      } else if (userID) {
+        await getStudentClasses(userID)
+          .then(({ data }) => {
+            setClasses(data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
     };
 
@@ -48,7 +60,6 @@ export function HomePage() {
       if (userType) {
         await fetchClasses(userType);
       }
-      // console.log(classes)
     }, 100);
   }, []);
 
@@ -95,14 +106,16 @@ export function HomePage() {
                             <i className="bi bi-eyeglasses text-dark fs-2x"></i>
                           </button>
                         </Link>
-                        <button
-                          type="button"
-                          className="btn btn-active-danger "
-                          style={{ margin: 5 }}
-                          onClick={() => handleDeleteClass(classItem.id)}
-                        >
-                          <i className="bi bi-trash3 text-dark fs-2x"></i>
-                        </button>
+                        {userType === "teacher" && (
+                          <button
+                            type="button"
+                            className="btn btn-active-danger "
+                            style={{ margin: 5 }}
+                            onClick={() => handleDeleteClass(classItem.id)}
+                          >
+                            <i className="bi bi-trash3 text-dark fs-2x"></i>
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -128,9 +141,7 @@ export function HomePage() {
                 </div>
               </div>
             </div>
-          ) : (
-            <p>{user?.type ?? "-"}</p>
-          )}
+          ) : null}
         </div>
       </div>
 

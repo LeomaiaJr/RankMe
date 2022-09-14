@@ -9,6 +9,8 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import clsx from "clsx";
 import { toAbsoluteUrl } from "../../_start/helpers";
+import { getAuthUserData } from "../../util/auth";
+import { submitAnswer } from "../modules/auth/redux/AnswerService";
 
 const questionSchema = Yup.object()
   .shape({
@@ -43,12 +45,15 @@ const initialValues = {
 };
 
 export function QuestionPage() {
+  const [user, setUser] = useState(getAuthUserData());
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState(true);
   const [question, setQuestion]: any = useState();
   const [correctOption, setCorrectOption] = useState("");
   const [correctWasChanged, setCorrectWasChanged] = useState(false);
   const [topic, setTopic]: any = useState();
+  const [isStudent, setIsStudent] = useState(user?.type === "student");
+  const [isTeacher, setIsTeacher] = useState(user?.type === "teacher");
 
   const formik = useFormik({
     initialValues,
@@ -82,7 +87,7 @@ export function QuestionPage() {
         .then(({ data }) => {
           setQuestion(data[0]);
           setCorrectOption(data[0].correct_option);
-
+          fetchTopic(data[0].topic);
           formik.setValues({
             ...data[0],
           });
@@ -90,8 +95,8 @@ export function QuestionPage() {
         .catch((error) => {});
     };
 
-    const fetchTopic = async () => {
-      await getTopic(question?.topicId)
+    const fetchTopic = async (topic: any) => {
+      await getTopic(topic)
         .then(({ data }) => {
           setTopic(data[0]);
         })
@@ -100,7 +105,6 @@ export function QuestionPage() {
 
     setTimeout(async () => {
       await fetchQuestion();
-      await fetchTopic();
       setLoading(false);
     }, 100);
   }, [id]);
@@ -114,10 +118,24 @@ export function QuestionPage() {
     setCorrectWasChanged(true);
   };
 
+  const handleSendAnswer = async () => {
+    if (correctWasChanged) {
+      const answer = {
+        answer: correctOption,
+        question: question?.id,
+        student: user?.id,
+        class: topic?.class.id,
+      };
+
+      await submitAnswer(answer);
+      window.location.href = `/topic/${topic.id}`;
+    }
+  };
+
   return (
     <>
       {loading ? (
-        <div className="align-itens-center">
+        <div className="align-itens-center mx-auto">
           <div>Loading...</div>
           <img
             alt="Logo"
@@ -161,6 +179,7 @@ export function QuestionPage() {
                   }
                 ) + "form-control "
               }
+              readOnly={isStudent}
               placeholder="Texto da questão"
             />
             {formik.touched.question_text && formik.errors.question_text && (
@@ -171,8 +190,12 @@ export function QuestionPage() {
               </div>
             )}
           </div>
-          {!correctWasChanged ? (
-            <>Resposta correta atual: {correctOption}</>
+          {!correctWasChanged && !isStudent ? (
+            <div style={{ marginBottom: 10 }}>
+              <span className="text-muted">Resposta correta atual: </span>
+              <span className="text-dark fw-bolder">{correctOption}</span>
+              <br />
+            </div>
           ) : null}
           <div>
             <div className="row g-5">
@@ -215,6 +238,7 @@ export function QuestionPage() {
                       ) + "form-control "
                     }
                     placeholder="Opção A"
+                    readOnly={isStudent}
                   />
                   {formik.touched.option_a && formik.errors.option_a && (
                     <div className="fv-plugins-message-container">
@@ -266,6 +290,7 @@ export function QuestionPage() {
                       ) + "form-control "
                     }
                     placeholder="Opção B"
+                    readOnly={isStudent}
                   />
                   {formik.touched.option_b && formik.errors.option_b && (
                     <div className="fv-plugins-message-container">
@@ -317,6 +342,7 @@ export function QuestionPage() {
                       ) + "form-control "
                     }
                     placeholder="Opção C"
+                    readOnly={isStudent}
                   />
                   {formik.touched.option_c && formik.errors.option_c && (
                     <div className="fv-plugins-message-container">
@@ -367,6 +393,7 @@ export function QuestionPage() {
                       ) + "form-control "
                     }
                     placeholder="Opção D"
+                    readOnly={isStudent}
                   />
                   {formik.touched.option_d && formik.errors.option_d && (
                     <div className="fv-plugins-message-container">
@@ -383,8 +410,22 @@ export function QuestionPage() {
               type="button"
               className="btn btn-primary"
               onClick={handleUpdateQuestion}
+              hidden={isStudent}
             >
               Atualizar
+            </button>
+
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => {
+                setTimeout(async () => {
+                  await handleSendAnswer();
+                });
+              }}
+              hidden={isTeacher}
+            >
+              Enviar
             </button>
           </div>
         </div>

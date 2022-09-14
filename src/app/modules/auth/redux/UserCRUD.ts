@@ -16,8 +16,20 @@ export function getTeacherClasses(id: string) {
   });
 }
 
-export function getUserAnalytics(id: string){
+export function getUserAnalytics(id: string) {
   return instance.get(`${GET_USER_BY_URL}/analytics`, {
     params: { id: id },
+  });
+}
+
+export function getStudentClasses(id: string) {
+  return instance.get(`${GET_USER_BY_URL}/student-classes`, {
+    params: { id: id },
+  });
+}
+
+export function userHasClass(userId: string, classId: string) {
+  return instance.get(`${GET_USER_BY_URL}/user-has-class`, {
+    params: { userId: userId, classId: classId },
   });
 }

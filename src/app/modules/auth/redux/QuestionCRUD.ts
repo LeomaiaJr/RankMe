@@ -16,3 +16,11 @@ export function updateQuestion(question: any) {
   const { id, ...rest } = question;
   return api.patch(`/questions/${question.id}`, { ...rest });
 }
+
+export function getQuestionsAvailable(query: any) {
+  return api.get(`/questions/availableToAnswer`, { params: query });
+}
+
+export function studentCanAnswer(query: any) {
+  return api.get(`/questions/user-can-answer`, { params: query });
+}
