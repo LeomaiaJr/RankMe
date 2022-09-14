@@ -23,7 +23,7 @@ export function HeaderUserMenu() {
           <span className="symbol-label bg-primary align-items-end">
             <img
               alt="Logo"
-              src={toAbsoluteUrl("/media/svg/avatars/001-boy.svg")}
+              src={toAbsoluteUrl(`/media/svg/avatars/${user?.avatar ?? '001-boy'}.svg`)}
               className="mh-35px"
             />
           </span>

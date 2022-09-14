@@ -9,6 +9,7 @@ export interface UserModel {
   username: string;
   password: string | undefined;
   email: string;
+  avatar: string;
   firstname: string;
   lastname: string;
   fullname?: string;

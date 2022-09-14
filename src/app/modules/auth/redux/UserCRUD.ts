@@ -33,3 +33,10 @@ export function userHasClass(userId: string, classId: string) {
     params: { userId: userId, classId: classId },
   });
 }
+
+export function updateUserAvatar(id: string, avatar: string) {
+  console.log(id)
+  return instance.patch(`${GET_USER_BY_URL}/${id}`, {
+    avatar: avatar,
+  });
+}

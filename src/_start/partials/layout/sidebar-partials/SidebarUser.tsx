@@ -16,7 +16,6 @@ export function SidebarUser() {
     setTimeout(async () => {
       await getUserAnalytics(user.id).then((res) => {
         setUserAnalytics(res.data);
-        console.log(res.data);
       }).catch((err) => {
         console.log(err);
       });
@@ -66,7 +65,7 @@ export function SidebarUser() {
                     <span className="symbol-label bg-warning  align-items-end">
                       <img
                         alt="Logo"
-                        src={toAbsoluteUrl("/media/svg/avatars/016-boy-7.svg")}
+                        src={toAbsoluteUrl(`/media/svg/avatars/${user.avatar}.svg`)}
                         className="mh-75px"
                       />
                     </span>
