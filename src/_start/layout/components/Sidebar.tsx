@@ -1,28 +1,110 @@
-import React, { useRef, useEffect } from "react";
-import { SidebarGeneral, SidebarShop, SidebarUser } from "../../partials";
-import { useTheme } from "../core";
+import { useEffect, useRef, useState } from 'react';
+import { api } from '../../../infra/api';
+import { RankData } from '../../../interfaces/rank';
+import { getAuthUserData } from '../../../util/auth';
+import { toAbsoluteUrl } from '../../helpers';
+import { useTheme } from '../core';
 
-const BG_COLORS = ['bg-white' , 'bg-info'];
+const BG_COLORS = ['bg-white', 'bg-info'];
 
 export function Sidebar() {
   const { config, classes } = useTheme();
   const sidebarCSSClass = classes.sidebar;
   const sideBarRef = useRef<HTMLDivElement | null>(null);
-  
+
   useEffect(() => {
     if (!sidebarCSSClass) {
       return;
     }
 
-    BG_COLORS.forEach(cssClass => {
+    BG_COLORS.forEach((cssClass) => {
       sideBarRef.current?.classList.remove(cssClass);
-    })
+    });
 
-    sidebarCSSClass.forEach(cssClass => {
+    sidebarCSSClass.forEach((cssClass) => {
       sideBarRef.current?.classList.add(cssClass);
-    })
-   
+    });
   }, [sidebarCSSClass]);
+
+  const [rankData, setRankData] = useState<RankData[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const [selectedClass, setSelectedClass] = useState<
+    | {
+        id: string;
+        name: string;
+      }
+    | undefined
+  >(undefined);
+  const [userClasses, setUserClasses] = useState<
+    { id: string; name: string }[]
+  >([]);
+
+  const fetchRankData = async () => {
+    setLoading(true);
+    const { data } = await api.get('/ranking', {
+      params: {
+        class: selectedClass?.id,
+      },
+    });
+    setRankData(data);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    if (selectedClass?.id !== undefined) {
+      fetchRankData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedClass]);
+
+  const fetchClasses = async () => {
+    const userData = getAuthUserData();
+
+    if (userData?.type === 'student') {
+      const { data } = await api.get<{ id: string; name: string }[]>(
+        `/users/student-classes`,
+        {
+          params: {
+            id: userData.id,
+          },
+        }
+      );
+      if (data.length > 0) setSelectedClass(data[0]);
+      setUserClasses(data);
+    } else {
+      const { data } = await api.get('/classes');
+      if (data.length > 0) setSelectedClass(data[0]);
+      setUserClasses(data);
+    }
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    fetchClasses();
+  }, []);
+
+  const getColorsData = (index: number) => {
+    if (index === 0) {
+      return {
+        backgroundColor: '#FEE101',
+      };
+    }
+    if (index === 1) {
+      return {
+        backgroundColor: '#D7D7D7',
+      };
+    }
+    if (index === 2) {
+      return {
+        backgroundColor: '#A77044',
+      };
+    }
+
+    return {
+      backgroundColor: 'white',
+    };
+  };
 
   return (
     <>
@@ -40,14 +122,128 @@ export function Sidebar() {
           data-kt-drawer-toggle="#kt_sidebar_toggler"
         >
           {/* begin::Sidebar Content */}
-          <div className="d-flex flex-column sidebar-body">
-            {config.sidebar.content === "general" && <SidebarGeneral />}
-            {config.sidebar.content === "shop" && (
-              <SidebarShop sidebarRef={sideBarRef} />
+          <div
+            className="d-flex flex-column sidebar-body"
+            style={{
+              padding: '0px 16px',
+              height: '100%',
+            }}
+          >
+            <div
+              style={{
+                marginTop: '20px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <img
+                style={{
+                  width: '50%',
+                }}
+                alt="rankme-logo"
+                src={toAbsoluteUrl('/media/svg/rankme/logo_verde.svg')}
+              />
+            </div>
+            {userClasses.length > 0 && !loading && (
+              <>
+                <div
+                  style={{
+                    marginTop: '32px',
+                    marginBottom: '32px',
+                  }}
+                >
+                  <label
+                    style={{
+                      color: 'white',
+                    }}
+                    className="form-label"
+                  >
+                    Turma
+                  </label>
+                  <select
+                    style={{
+                      width: '80%',
+                    }}
+                    className="form-select"
+                    aria-label="Select example"
+                    value={selectedClass?.id}
+                    onChange={(e) => {
+                      const selectedClass = userClasses.find(
+                        (c) => c.id === e.target.value
+                      );
+                      setSelectedClass(selectedClass);
+                    }}
+                  >
+                    <option>Selecione a turma</option>
+                    {userClasses.map((userClass) => (
+                      <option value={userClass.id}>{userClass.name}</option>
+                    ))}
+                  </select>
+                </div>
+                {rankData.length === 0 && !loading && (
+                  <p
+                    style={{
+                      color: 'white',
+                    }}
+                  >
+                    Não encontramos informações do rank da turma selecionada
+                  </p>
+                )}
+                {rankData.length > 0 && !loading && (
+                  <div
+                    className="card-body pt-0"
+                    style={{
+                      overflow: 'auto',
+                      height: '100%',
+                      marginRight: '-16px',
+                    }}
+                  >
+                    {rankData.map((rankItem, index) => (
+                      <div
+                        className="d-flex flex-wrap align-items-center mb-7"
+                        key={rankItem.id}
+                      >
+                        {/* begin::Symbol */}
+                        <div
+                          className="symbol-label"
+                          style={{
+                            ...getColorsData(index),
+                            borderRadius: '50%',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            fontSize: '20px',
+                            fontWeight: 'bold',
+                            color: '#000',
+                            width: '40px',
+                            height: '40px',
+                            marginRight: '12px',
+                          }}
+                        >
+                          {rankItem.nick[0].toUpperCase()}
+                        </div>
+
+                        {/* end::Symbol */}
+
+                        {/* begin::Title */}
+                        <div className="d-flex flex-column flex-grow-1 my-lg-0 my-2 pe-3">
+                          <span className="text-white fw-bolder fs-6">
+                            {rankItem.nick}
+                          </span>
+                          <span className="text-white opacity-25 fw-bold fs-7 my-1">
+                            {rankItem.score} pontos
+                          </span>
+                        </div>
+                        {/* end::Title */}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
             )}
-            {config.sidebar.content === "user" && <SidebarUser />}
           </div>
-          {/* end::Sidebar Content */}
         </div>
       )}
     </>
