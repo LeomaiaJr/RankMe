@@ -22,7 +22,7 @@ ReactDOM.render(
   <Provider store={store}>
     {/* Asynchronously persist redux stores and show `SplashScreen` while it's loading. */}
     <PersistGate persistor={persistor} loading={<div>Loading...</div>}>
-      <App basename={''} />
+      <App />
     </PersistGate>
   </Provider>,
   document.getElementById('root')
