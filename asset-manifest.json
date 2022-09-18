@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/rank-me/static/css/main.e92f7b3f.chunk.css",
-    "main.js": "/rank-me/static/js/main.2d392a65.chunk.js",
-    "main.js.map": "/rank-me/static/js/main.2d392a65.chunk.js.map",
+    "main.js": "/rank-me/static/js/main.a58faad4.chunk.js",
+    "main.js.map": "/rank-me/static/js/main.a58faad4.chunk.js.map",
     "runtime-main.js": "/rank-me/static/js/runtime-main.2dfc4276.js",
     "runtime-main.js.map": "/rank-me/static/js/runtime-main.2dfc4276.js.map",
     "static/css/2.8b49c2e4.chunk.css": "/rank-me/static/css/2.8b49c2e4.chunk.css",
@@ -25,6 +25,6 @@
     "static/css/2.8b49c2e4.chunk.css",
     "static/js/2.a8160a9d.chunk.js",
     "static/css/main.e92f7b3f.chunk.css",
-    "static/js/main.2d392a65.chunk.js"
+    "static/js/main.a58faad4.chunk.js"
   ]
 }
