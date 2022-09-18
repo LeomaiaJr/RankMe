@@ -1,30 +1,30 @@
 {
   "files": {
-    "main.css": "/rank-me/static/css/main.e92f7b3f.chunk.css",
-    "main.js": "/rank-me/static/js/main.23297adf.chunk.js",
-    "main.js.map": "/rank-me/static/js/main.23297adf.chunk.js.map",
-    "runtime-main.js": "/rank-me/static/js/runtime-main.9db116ae.js",
-    "runtime-main.js.map": "/rank-me/static/js/runtime-main.9db116ae.js.map",
-    "static/css/2.8b49c2e4.chunk.css": "/rank-me/static/css/2.8b49c2e4.chunk.css",
-    "static/js/2.7dc9c7a2.chunk.js": "/rank-me/static/js/2.7dc9c7a2.chunk.js",
-    "static/js/2.7dc9c7a2.chunk.js.map": "/rank-me/static/js/2.7dc9c7a2.chunk.js.map",
-    "static/js/3.1399184d.chunk.js": "/rank-me/static/js/3.1399184d.chunk.js",
-    "static/js/3.1399184d.chunk.js.map": "/rank-me/static/js/3.1399184d.chunk.js.map",
-    "static/js/4.6ccdf6c5.chunk.js": "/rank-me/static/js/4.6ccdf6c5.chunk.js",
-    "static/js/4.6ccdf6c5.chunk.js.map": "/rank-me/static/js/4.6ccdf6c5.chunk.js.map",
-    "static/js/5.42dec3bc.chunk.js": "/rank-me/static/js/5.42dec3bc.chunk.js",
-    "static/js/5.42dec3bc.chunk.js.map": "/rank-me/static/js/5.42dec3bc.chunk.js.map",
-    "index.html": "/rank-me/index.html",
-    "static/css/2.8b49c2e4.chunk.css.map": "/rank-me/static/css/2.8b49c2e4.chunk.css.map",
-    "static/css/main.e92f7b3f.chunk.css.map": "/rank-me/static/css/main.e92f7b3f.chunk.css.map",
-    "static/js/2.7dc9c7a2.chunk.js.LICENSE.txt": "/rank-me/static/js/2.7dc9c7a2.chunk.js.LICENSE.txt",
-    "static/media/style.scss": "/rank-me/static/media/socicon.fa1cafd6.woff"
+    "main.css": "/www.rank-me.live/static/css/main.e92f7b3f.chunk.css",
+    "main.js": "/www.rank-me.live/static/js/main.b7b8dba0.chunk.js",
+    "main.js.map": "/www.rank-me.live/static/js/main.b7b8dba0.chunk.js.map",
+    "runtime-main.js": "/www.rank-me.live/static/js/runtime-main.39da02a0.js",
+    "runtime-main.js.map": "/www.rank-me.live/static/js/runtime-main.39da02a0.js.map",
+    "static/css/2.7fa9386e.chunk.css": "/www.rank-me.live/static/css/2.7fa9386e.chunk.css",
+    "static/js/2.7dc9c7a2.chunk.js": "/www.rank-me.live/static/js/2.7dc9c7a2.chunk.js",
+    "static/js/2.7dc9c7a2.chunk.js.map": "/www.rank-me.live/static/js/2.7dc9c7a2.chunk.js.map",
+    "static/js/3.689d715b.chunk.js": "/www.rank-me.live/static/js/3.689d715b.chunk.js",
+    "static/js/3.689d715b.chunk.js.map": "/www.rank-me.live/static/js/3.689d715b.chunk.js.map",
+    "static/js/4.6ccdf6c5.chunk.js": "/www.rank-me.live/static/js/4.6ccdf6c5.chunk.js",
+    "static/js/4.6ccdf6c5.chunk.js.map": "/www.rank-me.live/static/js/4.6ccdf6c5.chunk.js.map",
+    "static/js/5.42dec3bc.chunk.js": "/www.rank-me.live/static/js/5.42dec3bc.chunk.js",
+    "static/js/5.42dec3bc.chunk.js.map": "/www.rank-me.live/static/js/5.42dec3bc.chunk.js.map",
+    "index.html": "/www.rank-me.live/index.html",
+    "static/css/2.7fa9386e.chunk.css.map": "/www.rank-me.live/static/css/2.7fa9386e.chunk.css.map",
+    "static/css/main.e92f7b3f.chunk.css.map": "/www.rank-me.live/static/css/main.e92f7b3f.chunk.css.map",
+    "static/js/2.7dc9c7a2.chunk.js.LICENSE.txt": "/www.rank-me.live/static/js/2.7dc9c7a2.chunk.js.LICENSE.txt",
+    "static/media/style.scss": "/www.rank-me.live/static/media/socicon.fa1cafd6.woff"
   },
   "entrypoints": [
-    "static/js/runtime-main.9db116ae.js",
-    "static/css/2.8b49c2e4.chunk.css",
+    "static/js/runtime-main.39da02a0.js",
+    "static/css/2.7fa9386e.chunk.css",
     "static/js/2.7dc9c7a2.chunk.js",
     "static/css/main.e92f7b3f.chunk.css",
-    "static/js/main.23297adf.chunk.js"
+    "static/js/main.b7b8dba0.chunk.js"
   ]
 }
