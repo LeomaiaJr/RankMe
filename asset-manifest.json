@@ -1,0 +1,30 @@
+{
+  "files": {
+    "main.css": "/rank-me/static/css/main.e92f7b3f.chunk.css",
+    "main.js": "/rank-me/static/js/main.2d392a65.chunk.js",
+    "main.js.map": "/rank-me/static/js/main.2d392a65.chunk.js.map",
+    "runtime-main.js": "/rank-me/static/js/runtime-main.2dfc4276.js",
+    "runtime-main.js.map": "/rank-me/static/js/runtime-main.2dfc4276.js.map",
+    "static/css/2.8b49c2e4.chunk.css": "/rank-me/static/css/2.8b49c2e4.chunk.css",
+    "static/js/2.a8160a9d.chunk.js": "/rank-me/static/js/2.a8160a9d.chunk.js",
+    "static/js/2.a8160a9d.chunk.js.map": "/rank-me/static/js/2.a8160a9d.chunk.js.map",
+    "static/js/3.74239fff.chunk.js": "/rank-me/static/js/3.74239fff.chunk.js",
+    "static/js/3.74239fff.chunk.js.map": "/rank-me/static/js/3.74239fff.chunk.js.map",
+    "static/js/4.6ccdf6c5.chunk.js": "/rank-me/static/js/4.6ccdf6c5.chunk.js",
+    "static/js/4.6ccdf6c5.chunk.js.map": "/rank-me/static/js/4.6ccdf6c5.chunk.js.map",
+    "static/js/5.42dec3bc.chunk.js": "/rank-me/static/js/5.42dec3bc.chunk.js",
+    "static/js/5.42dec3bc.chunk.js.map": "/rank-me/static/js/5.42dec3bc.chunk.js.map",
+    "index.html": "/rank-me/index.html",
+    "static/css/2.8b49c2e4.chunk.css.map": "/rank-me/static/css/2.8b49c2e4.chunk.css.map",
+    "static/css/main.e92f7b3f.chunk.css.map": "/rank-me/static/css/main.e92f7b3f.chunk.css.map",
+    "static/js/2.a8160a9d.chunk.js.LICENSE.txt": "/rank-me/static/js/2.a8160a9d.chunk.js.LICENSE.txt",
+    "static/media/style.scss": "/rank-me/static/media/socicon.fa1cafd6.woff"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.2dfc4276.js",
+    "static/css/2.8b49c2e4.chunk.css",
+    "static/js/2.a8160a9d.chunk.js",
+    "static/css/main.e92f7b3f.chunk.css",
+    "static/js/main.2d392a65.chunk.js"
+  ]
+}
