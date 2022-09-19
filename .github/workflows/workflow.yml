@@ -1,0 +1,27 @@
+name: Github Pages Auto Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - names: Checkout
+        uses: actions/checkout@v2
+
+    - name: Install and Build
+      run: npm install && npm run build
+
+    - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.4.0
+        with:
+          branch: gh-pages
+          folder: build
