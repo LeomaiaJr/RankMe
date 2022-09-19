@@ -1,18 +1,10 @@
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { Redirect, Switch } from "react-router-dom";
-import * as auth from "./redux/AuthRedux";
+import { useEffect } from 'react';
 
 export function Logout() {
-  const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(auth.actions.logout());
-    document.location.reload();
-  }, [dispatch]);
+    sessionStorage.removeItem('rankme-auth');
+    document.location.href = '/auth/login';
+  }, []);
 
-  return (
-    <Switch>
-      <Redirect to="/auth/login" />
-    </Switch>
-  );
+  return null;
 }
