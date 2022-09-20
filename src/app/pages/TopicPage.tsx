@@ -182,7 +182,7 @@ export function TopicPage() {
                                   style={{ margin: 5 }}
                                   onClick={() => {
                                     if (user.type === "teacher") {
-                                      window.location.href = `/question/${question.id}`;
+                                      window.location.href = `/#/question/${question.id}`;
                                     } else {
                                       document
                                         .getElementById(
@@ -206,7 +206,7 @@ export function TopicPage() {
                                               return false;
                                             })
                                         ) {
-                                          window.location.href = `/question/${question.id}`;
+                                          window.location.href = `/#/question/${question.id}`;
                                         }
                                         setTimeout(() => {
                                           document

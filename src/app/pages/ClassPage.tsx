@@ -25,7 +25,7 @@ export function ClassPage() {
       await userHasClass(user.id, id)
         .then(({ data }) => {
           if (!data) {
-            window.location.href = "/home";
+            window.location.href = "/#/home";
           }
         })
         .catch((error) => {

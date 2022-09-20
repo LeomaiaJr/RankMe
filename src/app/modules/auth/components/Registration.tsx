@@ -69,7 +69,7 @@ export function Registration() {
         })
         .then(() => {
           setLoading(false);
-          window.location.href = 'auth/login';
+          window.location.href = '/#/auth/login';
         })
         .catch(() => {
           setLoading(false);

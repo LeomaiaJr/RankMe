@@ -128,7 +128,7 @@ export function QuestionPage() {
       };
 
       await submitAnswer(answer);
-      window.location.href = `/topic/${topic.id}`;
+      window.location.href = `/#/topic/${topic.id}`;
     }
   };
 

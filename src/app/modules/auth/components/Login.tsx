@@ -34,7 +34,7 @@ export function Login() {
           .then(({ data }) => {
             setLoading(false);
             sessionStorage.setItem('rankme-auth', JSON.stringify(data));
-            window.location.href = '/home';
+            window.location.href = '/#/home';
           })
           .catch(() => {
             setLoading(false);
