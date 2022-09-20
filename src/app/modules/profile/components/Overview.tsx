@@ -152,7 +152,7 @@ export function Overview() {
                                         sessionStorage.removeItem(
                                           "rankme-auth"
                                         );
-                                        document.location.href = "/logout";
+                                        document.location.href = "/#/logout";
                                         console.log(response.data);
                                       })
                                       .catch((error) => {
