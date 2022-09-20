@@ -1,55 +1,72 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import clsx from 'clsx';
-import { useFormik } from 'formik';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import * as Yup from 'yup';
-import { api } from '../../../../infra/api';
+import clsx from "clsx";
+import { useFormik } from "formik";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import * as Yup from "yup";
+import { api } from "../../../../infra/api";
 
 const initialValues = {
-  name: '',
-  nick: '',
-  email: '',
-  password: '',
-  changepassword: '',
-  phone: '',
-  register_id: '',
-  type: 'student',
+  name: "",
+  nick: "",
+  email: "",
+  password: "",
+  changepassword: "",
+  phone: "",
+  register_id: "",
+  type: "student",
 };
 
 const registrationSchema = Yup.object().shape({
-  type: Yup.string().required('O tipo é obrigatório'),
+  type: Yup.string().required("O tipo é obrigatório"),
   name: Yup.string()
-    .min(3, 'Mínimo de 3 caracteres')
-    .max(50, 'Máximo de 100 caracteres')
-    .required('O nome é obrigatório'),
-  register_id: Yup.number().required('A matrícula é obrigatória'),
+    .min(3, "Mínimo de 3 caracteres")
+    .max(50, "Máximo de 100 caracteres")
+    .required("O nome é obrigatório")
+    .test("valid-name", "Nome inválido", async (name) => {
+      // name cant be string with void spaces
+      const namePattern = RegExp("^^(?!\\s*$).+$");
+      return namePattern.test(name ?? "");
+    }),
+  register_id: Yup.number()
+    .required("A matrícula é obrigatória")
+    .test("valid-register-id", "Matrícula inválida", async (register_id) => {
+      if (register_id) {
+        return register_id > 0;
+      }
+      return false;
+    }),
   nick: Yup.string()
-    .min(3, 'Mínimo de 3 caracteres')
-    .max(50, 'Máximo de 100 caracteres')
-    .optional(),
+    .min(3, "Mínimo de 3 caracteres")
+    .max(50, "Máximo de 100 caracteres")
+    .required("O nick é obrigatório")
+    .test("valid-nick", "Nick inválido", async (nick) => {
+      // nick cant be string with void spaces
+      const nickPattern = RegExp("^^(?!\\s*$).+$");
+      return nickPattern.test(nick ?? "");
+    }),
   phone: Yup.string()
-    .matches(/^\d{9}$/, 'O telefone deve conter 9 dígitos')
-    .required('O telefone é obrigatório'),
+    .matches(/^\d{11}$/, "O telefone deve conter 11 dígitos")
+    .required("O telefone é obrigatório"),
   email: Yup.string()
-    .required('O email é obrigatório')
-    .test('valid-inatel-email', 'Email do Inatel inválido', async (email) => {
-      const teacherPattern = RegExp('^[\\w\\.]+(@)inatel\\.br$');
-      const studentPattern = RegExp('^[\\w\\.]+(@)[a-z]{3}\\.inatel\\.br$');
+    .required("O email é obrigatório")
+    .test("valid-inatel-email", "Email do Inatel inválido", async (email) => {
+      const teacherPattern = RegExp("^[\\w\\.]+(@)inatel\\.br$");
+      const studentPattern = RegExp("^[\\w\\.]+(@)[a-z]{3}\\.inatel\\.br$");
 
       return (
-        teacherPattern.test(email ?? '') || studentPattern.test(email ?? '')
+        teacherPattern.test(email ?? "") || studentPattern.test(email ?? "")
       );
     }),
   password: Yup.string()
-    .min(3, 'Mínimo de 3 caracteres')
-    .max(50, 'Máximo de 100 caracteres')
-    .required('A senha é obrigatória'),
+    .min(6, "Mínimo de 6 caracteres")
+    .max(50, "Máximo de 100 caracteres")
+    .required("A senha é obrigatória"),
   changepassword: Yup.string()
-    .required('A confirmação de senha é obrigatória')
-    .when('password', {
+    .required("A confirmação de senha é obrigatória")
+    .when("password", {
       is: (val: string) => (val && val.length > 0 ? true : false),
-      then: Yup.string().oneOf([Yup.ref('password')], 'As senhas não conferem'),
+      then: Yup.string().oneOf([Yup.ref("password")], "As senhas não conferem"),
     }),
 });
 
@@ -62,33 +79,33 @@ export function Registration() {
       setLoading(true);
 
       api
-        .post('users', {
+        .post("users", {
           ...values,
-          nick: values.type === 'teacher' ? undefined : values.nick,
+          nick: values.type === "teacher" ? undefined : values.nick,
           changepassword: undefined,
         })
         .then(() => {
           setLoading(false);
-          window.location.href = '/#/auth/login';
+          window.location.href = "/#/auth/login";
         })
         .catch(() => {
           setLoading(false);
           setSubmitting(false);
-          setStatus('Erro ao registrar usuário');
+          setStatus("Erro ao registrar usuário");
         });
     },
   });
 
-  const getClass = (field: 'teacher' | 'student') => {
+  const getClass = (field: "teacher" | "student") => {
     if (field === formik.values.type) {
-      return 'btn btn-primary';
+      return "btn btn-primary";
     }
-    return 'btn btn-secondary';
+    return "btn btn-secondary";
   };
 
-  const handleSelection = (e: any, field: 'teacher' | 'student') => {
+  const handleSelection = (e: any, field: "teacher" | "student") => {
     e.preventDefault();
-    formik.setFieldValue('type', field);
+    formik.setFieldValue("type", field);
   };
 
   return (
@@ -109,24 +126,24 @@ export function Registration() {
 
       <div
         style={{
-          display: 'flex',
-          justifyContent: 'space-evenly',
-          marginBottom: '10px',
+          display: "flex",
+          justifyContent: "space-evenly",
+          marginBottom: "10px",
         }}
       >
         <button
           onClick={(e) => {
-            handleSelection(e, 'student');
+            handleSelection(e, "student");
           }}
-          className={getClass('student')}
+          className={getClass("student")}
         >
           Aluno
         </button>
         <button
           onClick={(e) => {
-            handleSelection(e, 'teacher');
+            handleSelection(e, "teacher");
           }}
-          className={getClass('teacher')}
+          className={getClass("teacher")}
         >
           Professor
         </button>
@@ -147,14 +164,14 @@ export function Registration() {
           placeholder="Nome completo"
           type="text"
           autoComplete="off"
-          {...formik.getFieldProps('name')}
+          {...formik.getFieldProps("name")}
           className={clsx(
-            'form-control form-control-lg form-control-solid',
+            "form-control form-control-lg form-control-solid",
             {
-              'is-invalid': formik.touched.name && formik.errors.name,
+              "is-invalid": formik.touched.name && formik.errors.name,
             },
             {
-              'is-valid': formik.touched.name && !formik.errors.name,
+              "is-valid": formik.touched.name && !formik.errors.name,
             }
           )}
         />
@@ -167,7 +184,7 @@ export function Registration() {
       {/* end::Form group */}
 
       {/* begin::Form group nick */}
-      {formik.values.type === 'student' && (
+      {formik.values.type === "student" && (
         <div className="fv-row mb-5">
           <label className="form-label fs-6 fw-bolder text-dark pt-5">
             Nickname
@@ -176,14 +193,14 @@ export function Registration() {
             placeholder="Nickname"
             type="text"
             autoComplete="off"
-            {...formik.getFieldProps('nick')}
+            {...formik.getFieldProps("nick")}
             className={clsx(
-              'form-control form-control-lg form-control-solid',
+              "form-control form-control-lg form-control-solid",
               {
-                'is-invalid': formik.touched.nick && formik.errors.nick,
+                "is-invalid": formik.touched.nick && formik.errors.nick,
               },
               {
-                'is-valid': formik.touched.nick && !formik.errors.nick,
+                "is-valid": formik.touched.nick && !formik.errors.nick,
               }
             )}
           />
@@ -205,14 +222,14 @@ export function Registration() {
           placeholder="Telefone"
           type="text"
           autoComplete="off"
-          {...formik.getFieldProps('phone')}
+          {...formik.getFieldProps("phone")}
           className={clsx(
-            'form-control form-control-lg form-control-solid',
+            "form-control form-control-lg form-control-solid",
             {
-              'is-invalid': formik.touched.phone && formik.errors.phone,
+              "is-invalid": formik.touched.phone && formik.errors.phone,
             },
             {
-              'is-valid': formik.touched.phone && !formik.errors.phone,
+              "is-valid": formik.touched.phone && !formik.errors.phone,
             }
           )}
         />
@@ -234,12 +251,12 @@ export function Registration() {
           placeholder="Email"
           type="email"
           autoComplete="off"
-          {...formik.getFieldProps('email')}
+          {...formik.getFieldProps("email")}
           className={clsx(
-            'form-control form-control-lg form-control-solid',
-            { 'is-invalid': formik.touched.email && formik.errors.email },
+            "form-control form-control-lg form-control-solid",
+            { "is-invalid": formik.touched.email && formik.errors.email },
             {
-              'is-valid': formik.touched.email && !formik.errors.email,
+              "is-valid": formik.touched.email && !formik.errors.email,
             }
           )}
         />
@@ -260,15 +277,15 @@ export function Registration() {
           placeholder="Matrícula"
           type="number"
           autoComplete="off"
-          {...formik.getFieldProps('register_id')}
+          {...formik.getFieldProps("register_id")}
           className={clsx(
-            'form-control form-control-lg form-control-solid',
+            "form-control form-control-lg form-control-solid",
             {
-              'is-invalid':
+              "is-invalid":
                 formik.touched.register_id && formik.errors.register_id,
             },
             {
-              'is-valid':
+              "is-valid":
                 formik.touched.register_id && !formik.errors.register_id,
             }
           )}
@@ -290,14 +307,14 @@ export function Registration() {
           type="password"
           placeholder="Senha"
           autoComplete="off"
-          {...formik.getFieldProps('password')}
+          {...formik.getFieldProps("password")}
           className={clsx(
-            'form-control form-control-lg form-control-solid',
+            "form-control form-control-lg form-control-solid",
             {
-              'is-invalid': formik.touched.password && formik.errors.password,
+              "is-invalid": formik.touched.password && formik.errors.password,
             },
             {
-              'is-valid': formik.touched.password && !formik.errors.password,
+              "is-valid": formik.touched.password && !formik.errors.password,
             }
           )}
         />
@@ -318,15 +335,15 @@ export function Registration() {
           type="password"
           placeholder="Senha"
           autoComplete="off"
-          {...formik.getFieldProps('changepassword')}
+          {...formik.getFieldProps("changepassword")}
           className={clsx(
-            'form-control form-control-lg form-control-solid',
+            "form-control form-control-lg form-control-solid",
             {
-              'is-invalid':
+              "is-invalid":
                 formik.touched.changepassword && formik.errors.changepassword,
             },
             {
-              'is-valid':
+              "is-valid":
                 formik.touched.changepassword && !formik.errors.changepassword,
             }
           )}
@@ -377,8 +394,8 @@ export function Registration() {
         >
           {!loading && <span className="indicator-label">Enviar</span>}
           {loading && (
-            <span className="indicator-progress" style={{ display: 'block' }}>
-              Por favor, aguarde...{' '}
+            <span className="indicator-progress" style={{ display: "block" }}>
+              Por favor, aguarde...{" "}
               <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
             </span>
           )}
