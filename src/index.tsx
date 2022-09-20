@@ -11,6 +11,9 @@ import axios from 'axios';
 // Apps
 import { App } from './app/App';
 import './_start/assets/sass/style.scss';
+
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+import reportWebVitals from './reportWebVitals';
 /**
  * Base URL of the website.
  *
@@ -27,3 +30,6 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 );
+
+serviceWorkerRegistration.unregister();
+reportWebVitals();

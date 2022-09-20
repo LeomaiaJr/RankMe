@@ -8,6 +8,7 @@ import { StartDashboardWrapper } from "../pages/dashboards/start-dashboard/Start
 import { HomePage } from "../pages/HomePage";
 import { MenuTestPage } from "../pages/MenuTestPage";
 import { QuestionPage } from "../pages/QuestionPage";
+import { Logout } from "../modules/auth/Logout";
 
 export function PrivateRoutes() {
   const ProfilePageWrapper = lazy(
@@ -31,6 +32,7 @@ export function PrivateRoutes() {
         <Route path="/class/:id" component={ClassPage} />
         <Route path="/topic/:id" component={TopicPage} />
         <Route path="/question/:id" component={QuestionPage} />
+        <Route path="/logout" component={Logout} />
         <Redirect from="/auth" to="/home" />
         <Redirect exact from="/" to="/home" />
         <Redirect to="home" />
