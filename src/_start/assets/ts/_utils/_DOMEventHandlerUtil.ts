@@ -50,7 +50,7 @@ export class DOMEventHandlerUtil {
     eventName: string,
     callBack: Function
   ): void {
-    element.addEventListener(eventName, function calee(e) {
+    element.addEventListener(eventName, function calee(e: any) {
       // remove event
       if (e.target && e.target.removeEventListener) {
         e.target.removeEventListener(e.type, calee);

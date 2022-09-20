@@ -139,7 +139,7 @@ export function QuestionPage() {
           <div>Loading...</div>
           <img
             alt="Logo"
-            src={toAbsoluteUrl("/media/rankme-logo/logo-verde.svg")}
+            src={toAbsoluteUrl("/media/rankme-logo/default.svg")}
             className="mh-100px"
           />
         </div>
