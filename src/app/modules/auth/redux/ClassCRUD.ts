@@ -21,5 +21,12 @@ export function getClassByString(query: string) {
 }
 
 export function addStudents(classId: string, studentId: string) {
-  return instance.post("/classes/addStudents", { classId, students: [studentId] });
+  return instance.post("/classes/addStudents", {
+    classId,
+    students: [studentId],
+  });
+}
+
+export function getStudents(classId: string) {
+  return instance.get("classes/get-students-by", { params: { classId } });
 }

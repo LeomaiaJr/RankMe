@@ -82,6 +82,11 @@ export function ClassPage() {
                   <div>
                     <h1>{class_?.name}</h1>
                     <h2>{class_?.teacher.name}</h2>
+                    {user.type === "teacher" ? (
+                      <Link to={`/class-students/${id}`}>
+                        <p>Ver quadro de alunos</p>
+                      </Link>
+                    ) : null}
                   </div>
                 ) : null}
               </div>
