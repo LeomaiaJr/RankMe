@@ -72,6 +72,8 @@ export function Sidebar() {
   const fetchClasses = async () => {
     const userData = getAuthUserData();
 
+    const currClass = location.pathname.split('/')[2];
+
     if (userData?.type === 'student') {
       const { data } = await api.get<{ id: string; name: string }[]>(
         `/users/student-classes`,
@@ -81,11 +83,12 @@ export function Sidebar() {
           },
         }
       );
-      if (data.length > 0) setSelectedClass(data[0]);
+
+      if (data.length > 0 && currClass === undefined) setSelectedClass(data[0]);
       setUserClasses(data);
     } else {
       const { data } = await api.get('/classes');
-      if (data.length > 0) setSelectedClass(data[0]);
+      if (data.length > 0 && currClass === undefined) setSelectedClass(data[0]);
       setUserClasses(data);
     }
   };
