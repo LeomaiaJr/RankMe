@@ -100,16 +100,20 @@ export function HomePage() {
                         <Link to={`/class/${classItem.id}`}>
                           <button
                             type="button"
-                            className="btn btn-active-success "
+                            className="btn btn-active-primary col-lg-12"
                             style={{ margin: 5 }}
                           >
-                            <i className="bi bi-eyeglasses text-dark fs-2x"></i>
+                            <i className="bi bi-eye text-dark fs-2x"></i>
+                            <span className="text-dark fw-bolder">
+                              {" "}
+                              Visualizar
+                            </span>
                           </button>
                         </Link>
                         {userType === "teacher" && (
                           <button
                             type="button"
-                            className="btn btn-active-danger "
+                            className="btn btn-active-danger col-lg-12"
                             style={{ margin: 5 }}
                             onClick={() => handleDeleteClass(classItem.id)}
                           >
