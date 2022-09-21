@@ -1,4 +1,4 @@
-import { api } from "../../../../infra/api";
+import { api } from '../../../../infra/api';
 const instance = api;
 
 const GET_USER_BY_URL = `/users`;
@@ -35,6 +35,7 @@ export function userHasClass(userId: string, classId: string) {
 }
 
 export function updateUserAvatar(id: string, avatar: string) {
+  console.log(avatar);
   return instance.patch(`${GET_USER_BY_URL}/${id}`, {
     avatar: avatar,
   });
