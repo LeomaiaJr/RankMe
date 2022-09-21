@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { getAuthUserData } from "../../util/auth";
-import { getClass, getStudents } from "../modules/auth/redux/ClassCRUD";
+import { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { getAuthUserData } from '../../util/auth';
+import { getClass, getStudents } from '../modules/auth/redux/ClassCRUD';
 
 export function ClassStudents() {
   const { id } = useParams<{ id: string }>();
@@ -9,7 +9,7 @@ export function ClassStudents() {
   const [loading, setLoading] = useState(true);
   const [user, setUser]: any = useState(getAuthUserData());
   const [class_, setClass]: any = useState();
-  const [students, setStudents]: any = useState();
+  const [students, setStudents]: any = useState([]);
 
   useEffect(() => {
     const fetchClass = async () => {
@@ -76,8 +76,8 @@ export function ClassStudents() {
                     <tr>
                       <td>
                         {student.name.length > 15
-                          ? student.name.substring(0, 15) + "..."
-                          : student.name.concat(["\t\t\t\t\t\t"])}
+                          ? student.name.substring(0, 15) + '...'
+                          : student.name.concat(['\t\t\t\t\t\t'])}
                       </td>
                       <td>{student.nick}</td>
                       <td>{student.rankings[0].score}</td>
