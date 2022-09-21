@@ -36,15 +36,17 @@ const registrationSchema = Yup.object().shape({
       }
       return false;
     }),
-  nick: Yup.string()
-    .min(3, "Mínimo de 3 caracteres")
-    .max(50, "Máximo de 100 caracteres")
-    .required("O nick é obrigatório")
-    .test("valid-nick", "Nick inválido", async (nick) => {
-      // nick cant be string with void spaces
-      const nickPattern = RegExp("^^(?!\\s*$).+$");
-      return nickPattern.test(nick ?? "");
-    }),
+  nick: Yup.string().when("type", {
+    is: "student",
+    then: Yup.string()
+      .min(3, "Mínimo de 3 caracteres")
+      .max(50, "Máximo de 100 caracteres")
+      .required("O nick é obrigatório")
+      .test("valid-nick", "Nick inválido", async (nick) => {
+        const nickPattern = RegExp("^^(?!\\s*$).+$");
+        return nickPattern.test(nick ?? "");
+      }),
+  }),
   phone: Yup.string()
     .matches(/^\d{11}$/, "O telefone deve conter 11 dígitos")
     .required("O telefone é obrigatório"),

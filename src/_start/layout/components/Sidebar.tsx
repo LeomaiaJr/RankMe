@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
-import { api } from '../../../infra/api';
-import { RankData } from '../../../interfaces/rank';
-import { getAuthUserData } from '../../../util/auth';
-import { toAbsoluteUrl } from '../../helpers';
-import { useTheme } from '../core';
+import { useEffect, useRef, useState } from "react";
+import { api } from "../../../infra/api";
+import { RankData } from "../../../interfaces/rank";
+import { getAuthUserData } from "../../../util/auth";
+import { toAbsoluteUrl } from "../../helpers";
+import { useTheme } from "../core";
 
-const BG_COLORS = ['bg-white', 'bg-info'];
+const BG_COLORS = ["bg-white", "bg-info"];
 
 export function Sidebar() {
   const { config, classes } = useTheme();
@@ -42,7 +42,7 @@ export function Sidebar() {
 
   const fetchRankData = async () => {
     setLoading(true);
-    const { data } = await api.get('/ranking', {
+    const { data } = await api.get("/ranking", {
       params: {
         class: selectedClass?.id,
       },
@@ -61,7 +61,7 @@ export function Sidebar() {
   const fetchClasses = async () => {
     const userData = getAuthUserData();
 
-    if (userData?.type === 'student') {
+    if (userData?.type === "student") {
       const { data } = await api.get<{ id: string; name: string }[]>(
         `/users/student-classes`,
         {
@@ -73,7 +73,7 @@ export function Sidebar() {
       if (data.length > 0) setSelectedClass(data[0]);
       setUserClasses(data);
     } else {
-      const { data } = await api.get('/classes');
+      const { data } = await api.get("/classes");
       if (data.length > 0) setSelectedClass(data[0]);
       setUserClasses(data);
     }
@@ -87,22 +87,22 @@ export function Sidebar() {
   const getColorsData = (index: number) => {
     if (index === 0) {
       return {
-        backgroundColor: '#FEE101',
+        backgroundColor: "#FEE101",
       };
     }
     if (index === 1) {
       return {
-        backgroundColor: '#D7D7D7',
+        backgroundColor: "#D7D7D7",
       };
     }
     if (index === 2) {
       return {
-        backgroundColor: '#A77044',
+        backgroundColor: "#A77044",
       };
     }
 
     return {
-      backgroundColor: 'white',
+      backgroundColor: "white",
     };
   };
 
@@ -125,38 +125,38 @@ export function Sidebar() {
           <div
             className="d-flex flex-column sidebar-body"
             style={{
-              padding: '0px 16px',
-              height: '100%',
+              padding: "0px 16px",
+              height: "100%",
             }}
           >
             <div
               style={{
-                marginTop: '20px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
+                marginTop: "20px",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
               <img
                 style={{
-                  width: '50%',
+                  width: "50%",
                 }}
                 alt="rankme-logo"
-                src={toAbsoluteUrl('/media/svg/rankme/logo_verde.svg')}
+                src={toAbsoluteUrl("/media/svg/rankme/logo_verde.svg")}
               />
             </div>
             {userClasses.length > 0 && !loading && (
               <>
                 <div
                   style={{
-                    marginTop: '32px',
-                    marginBottom: '32px',
+                    marginTop: "32px",
+                    marginBottom: "32px",
                   }}
                 >
                   <label
                     style={{
-                      color: 'white',
+                      color: "white",
                     }}
                     className="form-label"
                   >
@@ -164,7 +164,7 @@ export function Sidebar() {
                   </label>
                   <select
                     style={{
-                      width: '80%',
+                      width: "80%",
                     }}
                     className="form-select"
                     aria-label="Select example"
@@ -185,7 +185,7 @@ export function Sidebar() {
                 {rankData.length === 0 && !loading && (
                   <p
                     style={{
-                      color: 'white',
+                      color: "white",
                     }}
                   >
                     Não encontramos informações do rank da turma selecionada
@@ -195,9 +195,9 @@ export function Sidebar() {
                   <div
                     className="card-body pt-0"
                     style={{
-                      overflow: 'auto',
-                      height: '100%',
-                      marginRight: '-16px',
+                      overflow: "auto",
+                      height: "100%",
+                      marginRight: "-16px",
                     }}
                   >
                     {rankData.map((rankItem, index) => (
@@ -210,19 +210,27 @@ export function Sidebar() {
                           className="symbol-label"
                           style={{
                             ...getColorsData(index),
-                            borderRadius: '50%',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            fontSize: '20px',
-                            fontWeight: 'bold',
-                            color: '#000',
-                            width: '40px',
-                            height: '40px',
-                            marginRight: '12px',
+                            borderRadius: "50%",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            fontSize: "20px",
+                            fontWeight: "bold",
+                            color: "#000",
+                            width: "40px",
+                            height: "40px",
+                            marginRight: "12px",
                           }}
                         >
-                          {rankItem.nick[0].toUpperCase()}
+                          <img
+                            alt="Logo"
+                            src={toAbsoluteUrl(
+                              `/media/svg/avatars/${
+                                rankItem.student.avatar ?? "001-boy"
+                              }.svg`
+                            )}
+                            className="mh-35px"
+                          />
                         </div>
 
                         {/* end::Symbol */}
