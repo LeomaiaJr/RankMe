@@ -9,6 +9,7 @@ import { HomePage } from "../pages/HomePage";
 import { MenuTestPage } from "../pages/MenuTestPage";
 import { QuestionPage } from "../pages/QuestionPage";
 import { Logout } from "../modules/auth/Logout";
+import { ClassStudents } from "../pages/ClassStudents";
 
 export function PrivateRoutes() {
   const ProfilePageWrapper = lazy(
@@ -30,6 +31,7 @@ export function PrivateRoutes() {
         <Route path="/docs" component={DocsPageWrapper} />
         <Route path="/home" component={HomePage} />
         <Route path="/class/:id" component={ClassPage} />
+        <Route path="/class-students/:id" component={ClassStudents} />
         <Route path="/topic/:id" component={TopicPage} />
         <Route path="/question/:id" component={QuestionPage} />
         <Route path="/logout" component={Logout} />

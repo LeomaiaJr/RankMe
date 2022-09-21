@@ -95,7 +95,7 @@ export function TopicPage() {
     };
 
     const fetchQuestionsAvailable = async (classId: string) => {
-      await getQuestionsAvailable({ id: classId })
+      await getQuestionsAvailable({ id: classId, topicId: id })
         .then(async ({ data }) => {
           if (user.type !== "teacher") {
             for (const q of data) {
