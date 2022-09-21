@@ -12,6 +12,7 @@ import {
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import clsx from "clsx";
+import { studentAnsweredCorretly } from "../modules/auth/redux/AnswerService";
 
 const questionSchema = Yup.object()
   .shape({
@@ -95,7 +96,15 @@ export function TopicPage() {
 
     const fetchQuestionsAvailable = async (classId: string) => {
       await getQuestionsAvailable({ id: classId })
-        .then(({ data }) => {
+        .then(async ({ data }) => {
+          if (user.type !== "teacher") {
+            for (const q of data) {
+              q.correctly = await (
+                await studentAnsweredCorretly(user.id, q.id)
+              ).data;
+            }
+          }
+
           setQuestionsAvailable(data);
         })
         .catch((error) => {});
@@ -149,12 +158,26 @@ export function TopicPage() {
             <div className="topics">
               <div className="row g-5" style={{ minHeight: 100 }}>
                 {questionsAvailable?.length > 0
-                  ? questionsAvailable.map((question: any) => {
+                  ? questionsAvailable.map((question: any, index: number) => {
                       return (
                         <div className="col-lg-4" key={question.id}>
-                          <div className="card card-custom card-stretch-100 shadow mb-5">
+                          <div
+                            className={`card card-custom card-stretch-100 shadow mb-5 ${
+                              question.correctly && topic.results_available
+                                ? "bg-primary text-white"
+                                : ""
+                            }`}
+                          >
                             <div className="card-header">
-                              <h3 className="card-title">{question.name}</h3>
+                              <h3
+                                className={`card-title ${
+                                  question.correctly && topic.results_available
+                                    ? "text-white"
+                                    : ""
+                                }`}
+                              >
+                                Questão {index + 1}
+                              </h3>
                             </div>
                             <div
                               className="card-body"
@@ -173,7 +196,7 @@ export function TopicPage() {
                               </p>
                             </div>
                             <div className="card-footer mx-auto">
-                              {topic?.available_to_answer ? (
+                              {topic?.available_to_answer || user.type === "teacher" ? (
                                 <button
                                   id={`question-${question.id}`}
                                   title="Responder"
@@ -225,6 +248,12 @@ export function TopicPage() {
                                               "title",
                                               "Essa pergunta não está disponível para você responder"
                                             );
+
+                                          document
+                                            .getElementById(
+                                              `question-${question.id}`
+                                            )
+                                            ?.setAttribute("hidden", "true");
                                         }, 3000);
                                       });
                                     }
@@ -237,6 +266,13 @@ export function TopicPage() {
                                   </span>
                                   <i className="bi bi-pencil-square text-dark fs-2x"></i>
                                 </button>
+                              ) : null}
+                              {topic.results_available ? (
+                                <>
+                                  <span>
+                                    {question.correctly ? "✔️ Resposta Correta" : "Resposta Incorreta ❌"}
+                                  </span>
+                                </>
                               ) : null}
                               {user.type === "teacher" && (
                                 <button

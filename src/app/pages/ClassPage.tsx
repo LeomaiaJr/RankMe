@@ -98,35 +98,47 @@ export function ClassPage() {
                               <h3 className="card-title">{topic.name}</h3>
                             </div>
                             <div className="card-body mx-auto">
+                              {user.type !== "teacher" ? (
+                                <>
+                                  Situação:{" "}
+                                  {topic.available_to_answer
+                                    ? "Tópico está aberto"
+                                    : "Tópico está fechado"}
+                                </>
+                              ) : null}
                               {user.type === "teacher" ? (
-                                <div className="mx-auto">
+                                <div className="mx-auto row">
                                   {!topic.available_to_answer ? (
-                                    <button
-                                      type="button"
-                                      className="btn btn-active-primary mx-auto"
-                                      style={{ margin: 5 }}
-                                      onClick={() => {
-                                        setTimeout(async () => {
-                                          await openTopic(topic.id)
-                                            .then(({ data }) => {
-                                              window.location.reload();
-                                            })
-                                            .catch((error) => {
-                                              console.log(error);
+                                    <>
+                                      {!topic.results_available ? (
+                                        <button
+                                          type="button"
+                                          className="btn btn-active-primary col-lg-12"
+                                          style={{ margin: 5 }}
+                                          onClick={() => {
+                                            setTimeout(async () => {
+                                              await openTopic(topic.id)
+                                                .then(({ data }) => {
+                                                  window.location.reload();
+                                                })
+                                                .catch((error) => {
+                                                  console.log(error);
+                                                });
                                             });
-                                        });
-                                      }}
-                                    >
-                                      <i className="bi bi-eye text-dark fs-2x"></i>
-                                      <span className="text-dark fw-bolder">
-                                        {" "}
-                                        Abrir
-                                      </span>
-                                    </button>
+                                          }}
+                                        >
+                                          <i className="bi bi-eye text-dark fs-2x"></i>
+                                          <span className="text-dark fw-bolder">
+                                            {" "}
+                                            Abrir
+                                          </span>
+                                        </button>
+                                      ) : null}
+                                    </>
                                   ) : (
                                     <button
                                       type="button"
-                                      className="btn btn-active-primary "
+                                      className="btn btn-active-primary col-lg-12"
                                       style={{ margin: 5 }}
                                       onClick={() => {
                                         setTimeout(async () => {
@@ -147,57 +159,64 @@ export function ClassPage() {
                                       </span>
                                     </button>
                                   )}
-                                  <button
-                                    type="button"
-                                    className="btn btn-active-primary "
-                                    style={{ margin: 5 }}
-                                    onClick={() => {
-                                      setTimeout(async () => {
-                                        await makeResultsAvailable(topic.id)
-                                          .then(({ data }) => {
-                                            window.location.reload();
-                                          })
-                                          .catch((error) => {
-                                            console.log(error);
-                                          });
-                                      });
-                                    }}
-                                  >
-                                    <i
-                                      className={`bi ${
-                                        !topic.results_available
-                                          ? "bi-send-check"
-                                          : "bi-send-slash"
-                                      } text-dark fs-2x`}
-                                    ></i>
-                                    <span className="text-dark fw-bolder">
-                                      {" "}
-                                      {!topic.results_available
-                                        ? "Disponibilizar"
-                                        : "Retirar"}{" "}
-                                      Resultados
-                                    </span>
-                                  </button>
+                                  {!topic.available_to_answer ? (
+                                    <button
+                                      type="button"
+                                      className="btn btn-active-primary col-lg-12"
+                                      style={{ margin: 5 }}
+                                      onClick={() => {
+                                        setTimeout(async () => {
+                                          await makeResultsAvailable(topic.id)
+                                            .then(({ data }) => {
+                                              window.location.reload();
+                                            })
+                                            .catch((error) => {
+                                              console.log(error);
+                                            });
+                                        });
+                                      }}
+                                    >
+                                      <i
+                                        className={`bi ${
+                                          !topic.results_available
+                                            ? "bi-send-check"
+                                            : "bi-send-slash"
+                                        } text-dark fs-2x`}
+                                      ></i>
+                                      <span className="text-dark fw-bolder">
+                                        {" "}
+                                        {!topic.results_available
+                                          ? "Disponibilizar"
+                                          : "Retirar"}{" "}
+                                        Resultados
+                                      </span>
+                                    </button>
+                                  ) : null}
                                 </div>
                               ) : null}
                             </div>
-                            <div className="card-footer mx-auto">
+                            <div className="card-footer row">
                               {(topic.available_to_answer ||
+                                topic.results_available ||
                                 user.type === "teacher") && (
                                 <Link to={`/topic/${topic.id}`}>
                                   <button
                                     type="button"
-                                    className="btn btn-active-primary "
+                                    className="btn btn-active-primary col-lg-12"
                                     style={{ margin: 5 }}
                                   >
-                                    <i className="bi bi-pencil-square text-dark fs-2x"></i>
+                                    <i className="bi bi-eye text-dark fs-2x"></i>
+                                    <span className="text-dark fw-bolder">
+                                      {" "}
+                                      Acessar
+                                    </span>
                                   </button>
                                 </Link>
                               )}
                               {user.type === "teacher" && (
                                 <button
                                   type="button"
-                                  className="btn btn-active-danger "
+                                  className="btn btn-active-danger col-lg-12"
                                   style={{ margin: 5 }}
                                   onClick={() => handleDeleteTopic(topic.id)}
                                 >
