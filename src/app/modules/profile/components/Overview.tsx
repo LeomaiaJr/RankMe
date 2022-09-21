@@ -144,7 +144,6 @@ export function Overview() {
                               <button
                                 className="btn btn-primary btn-shadow ms-auto"
                                 onClick={() => {
-                                  console.log(avatar);
                                   setTimeout(async () => {
                                     await updateUserAvatar(user.id, avatar)
                                       .then((response) => {
@@ -153,7 +152,6 @@ export function Overview() {
                                           "rankme-auth"
                                         );
                                         document.location.href = "/#/logout";
-                                        console.log(response.data);
                                       })
                                       .catch((error) => {
                                         console.log(error);
