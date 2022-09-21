@@ -29,3 +29,12 @@ export const getAuthToken = () => {
 
   return authData.token;
 };
+
+export const setUserData = (data: UserData) => {
+  const authData: AuthData = {
+    user: data,
+    token: getAuthToken(),
+  };
+
+  sessionStorage.setItem('rankme-auth', JSON.stringify(authData));
+};

@@ -1,11 +1,28 @@
-import React, { useState } from "react";
-import { getAuthUserData } from "../../../../util/auth";
-import { KTSVG, toAbsoluteUrl } from "../../../../_start/helpers";
-import { avatars } from "../../../../util/avatar";
-import { updateUserAvatar } from "../../auth/redux/UserCRUD";
+import React, { useState } from 'react';
+import { getAuthUserData, setUserData } from '../../../../util/auth';
+import { KTSVG, toAbsoluteUrl } from '../../../../_start/helpers';
+import { avatars } from '../../../../util/avatar';
+import { updateUserAvatar } from '../../auth/redux/UserCRUD';
 
 export function Overview() {
-  const [user, setUser]: any = useState(getAuthUserData());
+  const [user, setUser] = useState<any>(getAuthUserData());
+
+  const handleClick = async (avatar: string) => {
+    await updateUserAvatar(user.id, avatar)
+      .then((response) => {
+        setUserData({
+          ...response.data,
+          avatar,
+        });
+        setUser({
+          ...response.data,
+          avatar,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <>
@@ -90,7 +107,7 @@ export function Overview() {
             </fieldset>
           </form>
           <button
-            style={{ marginTop: "20px" }}
+            style={{ marginTop: '20px' }}
             type="button"
             className="btn btn-active-primary center mx-auto"
             data-bs-toggle="modal"
@@ -126,47 +143,33 @@ export function Overview() {
               </div>
               <div className="modal-body">
                 <div className="row g-5">
-                  {avatars.map((avatar, index) => {
-                    return (
-                      <div className="col-lg-4" key={index}>
-                        <div className="card card-custom overlay overflow-hidden">
-                          <div className="card-body p-0 ">
-                            <div className="overlay-wrapper">
-                              <img
-                                alt="Logo"
-                                src={toAbsoluteUrl(
-                                  `/media/svg/avatars/${avatar}.svg`
-                                )}
-                                className="mh-60px me-auto"
-                              />
-                            </div>
-                            <div className="overlay-layer bg-dark bg-opacity-10 ">
-                              <button
-                                className="btn btn-primary btn-shadow ms-auto"
-                                onClick={() => {
-                                  setTimeout(async () => {
-                                    await updateUserAvatar(user.id, avatar)
-                                      .then((response) => {
-                                        setUser(response.data);
-                                        sessionStorage.removeItem(
-                                          "rankme-auth"
-                                        );
-                                        document.location.href = "/#/logout";
-                                      })
-                                      .catch((error) => {
-                                        console.log(error);
-                                      });
-                                  });
-                                }}
-                              >
-                                <i className="bi bi-check2-circle"></i>
-                              </button>
-                            </div>
+                  {avatars.map((avatar, index) => (
+                    <div className="col-lg-4" key={avatar}>
+                      <div className="card card-custom overlay overflow-hidden">
+                        <div className="card-body p-0 ">
+                          <div className="overlay-wrapper">
+                            <img
+                              alt="Logo"
+                              src={toAbsoluteUrl(
+                                `/media/svg/avatars/${avatar}.svg`
+                              )}
+                              className="mh-60px me-auto"
+                            />
+                          </div>
+                          <div className="overlay-layer bg-dark bg-opacity-10 ">
+                            <button
+                              className="btn btn-primary btn-shadow ms-auto"
+                              onClick={() => {
+                                handleClick(avatar);
+                              }}
+                            >
+                              <i className="bi bi-check2-circle"></i>
+                            </button>
                           </div>
                         </div>
                       </div>
-                    );
-                  })}
+                    </div>
+                  ))}
                 </div>
 
                 <div className="modal-footer ">
