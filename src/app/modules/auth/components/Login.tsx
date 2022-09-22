@@ -11,14 +11,14 @@ const loginSchema = Yup.object().shape({
     .min(6, 'Mínimo 6 caracteres')
     .max(100, 'Máximo de 100 caracteres')
     .required('O email é obrigatório'),
-    // .test('valid-inatel-email', 'Email do Inatel inválido', async (email) => {
-    //   const teacherPattern = RegExp('^[\\w\\.]+(@)inatel\\.br$');
-    //   const studentPattern = RegExp('^[\\w\\.]+(@)[a-z]{3}\\.inatel\\.br$');
+  // .test('valid-inatel-email', 'Email do Inatel inválido', async (email) => {
+  //   const teacherPattern = RegExp('^[\\w\\.]+(@)inatel\\.br$');
+  //   const studentPattern = RegExp('^[\\w\\.]+(@)[a-z]{3}\\.inatel\\.br$');
 
-    //   return (
-    //     teacherPattern.test(email ?? '') || studentPattern.test(email ?? '')
-    //   );
-    // }),
+  //   return (
+  //     teacherPattern.test(email ?? '') || studentPattern.test(email ?? '')
+  //   );
+  // }),
   password: Yup.string()
     .min(6, 'Mínimo 6 caracteres')
     .max(100, 'Máximo de 100 caracteres')
@@ -43,6 +43,7 @@ export function Login() {
             setLoading(false);
             sessionStorage.setItem('rankme-auth', JSON.stringify(data));
             window.location.href = '/#/home';
+            sessionStorage.setItem('rankme-reload', 'true');
           })
           .catch(() => {
             setLoading(false);
