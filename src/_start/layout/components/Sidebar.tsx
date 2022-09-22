@@ -37,6 +37,7 @@ export function Sidebar() {
       }
     | undefined
   >(undefined);
+  const selectedClassRef = useRef(selectedClass?.id);
   const [userClasses, setUserClasses] = useState<
     { id: string; name: string }[]
   >([]);
@@ -51,21 +52,27 @@ export function Sidebar() {
     }
   }, [location.pathname, userClasses]);
 
-  const fetchRankData = async () => {
-    setLoading(true);
+  const fetchRankData = async (classId?: string) => {
+    setLoading(classId ? false : true);
     const { data } = await api.get('/ranking', {
       params: {
-        class: selectedClass?.id,
+        class: classId ?? selectedClass?.id,
       },
     });
-    setRankData(data);
-    setLoading(false);
+    if (classId !== undefined && classId !== selectedClassRef.current) {
+      console.log(`skiping`);
+      console.log(classId, selectedClassRef.current);
+    } else {
+      setRankData(data);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     if (selectedClass?.id !== undefined) {
       fetchRankData();
     }
+    selectedClassRef.current = selectedClass?.id;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedClass]);
 
@@ -93,9 +100,23 @@ export function Sidebar() {
     }
   };
 
+  const intervalId = useRef<NodeJS.Timeout | null>(null);
+
   useEffect(() => {
     setLoading(true);
     fetchClasses();
+
+    intervalId.current = setInterval(() => {
+      fetchRankData(selectedClassRef.current);
+    }, 8000);
+
+    return () => {
+      if (intervalId.current) {
+        clearInterval(intervalId.current);
+      }
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getColorsData = (index: number) => {
