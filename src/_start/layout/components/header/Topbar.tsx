@@ -35,6 +35,7 @@ export function Topbar() {
           className="btn btn-icon btn-sm btn-active-bg-accent"
           data-kt-menu-trigger="click"
           data-kt-menu-placement="bottom-end"
+          onClick={() => {console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')}}
         >
           <KTSVG
             path="/media/icons/duotone/General/User.svg"

@@ -135,6 +135,21 @@ export function TopicPage() {
     setCorrectAnswer(e.target.value);
   };
 
+  const getCorrectAnswerText = (question: any) => {
+    switch (question.correct_option) {
+      case "A":
+        return question.option_a;
+      case "B":
+        return question.option_b;
+      case "C":
+        return question.option_c;
+      case "D":
+        return question.option_d;
+      default:
+        return "";
+    }
+  };
+
   return (
     <>
       <div>
@@ -196,7 +211,8 @@ export function TopicPage() {
                               </p>
                             </div>
                             <div className="card-footer mx-auto">
-                              {topic?.available_to_answer || user.type === "teacher" ? (
+                              {topic?.available_to_answer ||
+                              user.type === "teacher" ? (
                                 <button
                                   id={`question-${question.id}`}
                                   title="Responder"
@@ -267,10 +283,22 @@ export function TopicPage() {
                                   <i className="bi bi-pencil-square text-dark fs-2x"></i>
                                 </button>
                               ) : null}
+
                               {topic.results_available ? (
                                 <>
                                   <span>
-                                    {question.correctly ? "✔️ Resposta Correta" : "Resposta Incorreta ❌"}
+                                    {question.correctly ? (
+                                      "✔️ Resposta Correta"
+                                    ) : (
+                                      <>
+                                        <p>Resposta Incorreta ❌</p>
+                                        <p>
+                                          Resposta Correta:{" "}
+                                          {question.correct_option}
+                                        </p>
+                                        <p>{getCorrectAnswerText(question)}</p>
+                                      </>
+                                    )}
                                   </span>
                                 </>
                               ) : null}
