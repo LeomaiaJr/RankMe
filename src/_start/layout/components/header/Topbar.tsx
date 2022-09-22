@@ -1,14 +1,18 @@
-import React, { useState } from "react";
-import { KTSVG } from "../../../helpers";
-import {
-  SearchModal,
-  HeaderUserMenu,
-} from "../../../partials";
-import { useTheme } from "../../core";
+import React, { useState, useEffect } from 'react';
+import { KTSVG } from '../../../helpers';
+import { SearchModal, HeaderUserMenu } from '../../../partials';
+import { useTheme } from '../../core';
 
 export function Topbar() {
   const { config } = useTheme();
   const [showSearchModal, setShowSearchModal] = useState(false);
+
+  useEffect(() => {
+    if (sessionStorage.getItem('rankme-reload') === 'true') {
+      sessionStorage.removeItem('rankme-reload');
+      window.location.reload();
+    }
+  }, []);
 
   return (
     <>
@@ -35,7 +39,6 @@ export function Topbar() {
           className="btn btn-icon btn-sm btn-active-bg-accent"
           data-kt-menu-trigger="click"
           data-kt-menu-placement="bottom-end"
-          onClick={() => {console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')}}
         >
           <KTSVG
             path="/media/icons/duotone/General/User.svg"

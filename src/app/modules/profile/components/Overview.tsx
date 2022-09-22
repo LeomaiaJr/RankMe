@@ -18,6 +18,7 @@ export function Overview() {
           ...response.data,
           avatar,
         });
+        window.location.reload();
       })
       .catch((error) => {
         console.log(error);
