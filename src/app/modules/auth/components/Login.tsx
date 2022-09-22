@@ -10,15 +10,15 @@ const loginSchema = Yup.object().shape({
     .email('Formato de email inválido')
     .min(6, 'Mínimo 6 caracteres')
     .max(100, 'Máximo de 100 caracteres')
-    .required('O email é obrigatório')
-    .test('valid-inatel-email', 'Email do Inatel inválido', async (email) => {
-      const teacherPattern = RegExp('^[\\w\\.]+(@)inatel\\.br$');
-      const studentPattern = RegExp('^[\\w\\.]+(@)[a-z]{3}\\.inatel\\.br$');
+    .required('O email é obrigatório'),
+    // .test('valid-inatel-email', 'Email do Inatel inválido', async (email) => {
+    //   const teacherPattern = RegExp('^[\\w\\.]+(@)inatel\\.br$');
+    //   const studentPattern = RegExp('^[\\w\\.]+(@)[a-z]{3}\\.inatel\\.br$');
 
-      return (
-        teacherPattern.test(email ?? '') || studentPattern.test(email ?? '')
-      );
-    }),
+    //   return (
+    //     teacherPattern.test(email ?? '') || studentPattern.test(email ?? '')
+    //   );
+    // }),
   password: Yup.string()
     .min(6, 'Mínimo 6 caracteres')
     .max(100, 'Máximo de 100 caracteres')
