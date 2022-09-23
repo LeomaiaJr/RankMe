@@ -1,49 +1,49 @@
-import React, { useEffect, useRef, useState } from "react";
-import { getAuthUserData } from "../../util/auth";
-import { Link, useParams } from "react-router-dom";
-import { KTSVG } from "../../_start/helpers";
-import { getTopic } from "../modules/auth/redux/TopicCRUD";
+import React, { useEffect, useRef, useState } from 'react';
+import { getAuthUserData } from '../../util/auth';
+import { Link, useParams } from 'react-router-dom';
+import { KTSVG } from '../../_start/helpers';
+import { getTopic } from '../modules/auth/redux/TopicCRUD';
 import {
   createQuestion,
   deleteQuestion,
   getQuestionsAvailable,
   studentCanAnswer,
-} from "../modules/auth/redux/QuestionCRUD";
-import * as Yup from "yup";
-import { useFormik } from "formik";
-import clsx from "clsx";
-import { studentAnsweredCorretly } from "../modules/auth/redux/AnswerService";
+} from '../modules/auth/redux/QuestionCRUD';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
+import clsx from 'clsx';
+import { studentAnsweredCorretly } from '../modules/auth/redux/AnswerService';
 
 const questionSchema = Yup.object()
   .shape({
     question_text: Yup.string()
-      .min(10, "Mínimo 10 caracteres")
-      .max(400, "Máximo de 400 caracteres")
-      .required("A introdução é obrigatória"),
+      .min(10, 'Mínimo 10 caracteres')
+      .max(400, 'Máximo de 400 caracteres')
+      .required('A introdução é obrigatória'),
     option_a: Yup.string()
-      .max(100, "Máximo de 100 caracteres")
-      .required("A opção A é obrigatória"),
+      .max(100, 'Máximo de 100 caracteres')
+      .required('A opção A é obrigatória'),
     option_b: Yup.string()
-      .max(100, "Máximo de 100 caracteres")
-      .required("A opção B é obrigatória"),
+      .max(100, 'Máximo de 100 caracteres')
+      .required('A opção B é obrigatória'),
     option_c: Yup.string()
-      .max(100, "Máximo de 100 caracteres")
-      .required("A opção C é obrigatória"),
+      .max(100, 'Máximo de 100 caracteres')
+      .required('A opção C é obrigatória'),
     option_d: Yup.string()
-      .max(100, "Máximo de 100 caracteres")
-      .required("A opção D é obrigatória"),
+      .max(100, 'Máximo de 100 caracteres')
+      .required('A opção D é obrigatória'),
     correct_option: Yup.string(),
   })
-  .required("A pergunta é obrigatória");
+  .required('A pergunta é obrigatória');
 
 const initialValues = {
-  question_text: "",
-  option_a: "",
-  option_b: "",
-  option_c: "",
-  option_d: "",
-  correct_option: "",
-  topic: "id",
+  question_text: '',
+  option_a: '',
+  option_b: '',
+  option_c: '',
+  option_d: '',
+  correct_option: '',
+  topic: 'id',
 };
 
 export function TopicPage() {
@@ -52,14 +52,14 @@ export function TopicPage() {
   const [loading, setLoading] = useState(true);
   const [user, setUser]: any = useState(getAuthUserData());
   const [topic, setTopic]: any = useState();
-  const [correctAnswer, setCorrectAnswer] = useState("");
+  const [correctAnswer, setCorrectAnswer] = useState('');
   const [questionsAvailable, setQuestionsAvailable] = useState([]);
 
   const formik = useFormik({
     initialValues,
     validationSchema: questionSchema,
     onSubmit: (values, { setStatus, setSubmitting }) => {
-      if (correctAnswer !== "") {
+      if (correctAnswer !== '') {
         values.topic = id;
         values.correct_option = correctAnswer;
         setLoading(true);
@@ -72,11 +72,11 @@ export function TopicPage() {
             .catch((error) => {
               setLoading(false);
               setSubmitting(false);
-              setStatus("Verificar o preenchimento dos campos");
+              setStatus('Verificar o preenchimento dos campos');
             });
         }, 1000);
       } else {
-        setStatus("Selecione uma resposta correta");
+        setStatus('Selecione uma resposta correta');
       }
     },
   });
@@ -85,7 +85,7 @@ export function TopicPage() {
       await getTopic(id)
         .then(async ({ data }) => {
           setTopic(data[0]);
-          if (user.type !== "teacher") {
+          if (user.type !== 'teacher') {
             await fetchQuestionsAvailable(data[0].class.id);
           } else {
             setQuestionsAvailable(data[0].questions);
@@ -97,7 +97,7 @@ export function TopicPage() {
     const fetchQuestionsAvailable = async (classId: string) => {
       await getQuestionsAvailable({ id: classId, topicId: id })
         .then(async ({ data }) => {
-          if (user.type !== "teacher") {
+          if (user.type !== 'teacher') {
             for (const q of data) {
               q.correctly = await (
                 await studentAnsweredCorretly(user.id, q.id)
@@ -137,16 +137,16 @@ export function TopicPage() {
 
   const getCorrectAnswerText = (question: any) => {
     switch (question.correct_option) {
-      case "A":
+      case 'A':
         return question.option_a;
-      case "B":
+      case 'B':
         return question.option_b;
-      case "C":
+      case 'C':
         return question.option_c;
-      case "D":
+      case 'D':
         return question.option_d;
       default:
-        return "";
+        return '';
     }
   };
 
@@ -179,16 +179,16 @@ export function TopicPage() {
                           <div
                             className={`card card-custom card-stretch-100 shadow mb-5 ${
                               question.correctly && topic.results_available
-                                ? "bg-primary text-white"
-                                : ""
+                                ? 'bg-primary text-white'
+                                : ''
                             }`}
                           >
                             <div className="card-header">
                               <h3
                                 className={`card-title ${
                                   question.correctly && topic.results_available
-                                    ? "text-white"
-                                    : ""
+                                    ? 'text-white'
+                                    : ''
                                 }`}
                               >
                                 Questão {index + 1}
@@ -197,22 +197,22 @@ export function TopicPage() {
                             <div
                               className="card-body"
                               style={{
-                                textOverflow: "ellipsis",
-                                whiteSpace: "normal",
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'normal',
                               }}
                             >
                               <p>
                                 {question.question_text.length > 30
                                   ? question.question_text.substring(0, 30) +
-                                    "..."
+                                    '...'
                                   : question.question_text.concat([
-                                      "\t\t\t\t\t\t",
+                                      '\t\t\t\t\t\t',
                                     ])}
                               </p>
                             </div>
                             <div className="card-footer mx-auto">
                               {topic?.available_to_answer ||
-                              user.type === "teacher" ? (
+                              user.type === 'teacher' ? (
                                 <button
                                   id={`question-${question.id}`}
                                   title="Responder"
@@ -220,7 +220,7 @@ export function TopicPage() {
                                   className="btn btn-active-primary "
                                   style={{ margin: 5 }}
                                   onClick={() => {
-                                    if (user.type === "teacher") {
+                                    if (user.type === 'teacher') {
                                       window.location.href = `/#/question/${question.id}`;
                                     } else {
                                       document
@@ -228,8 +228,8 @@ export function TopicPage() {
                                           `question-${question.id}`
                                         )
                                         ?.setAttribute(
-                                          "data-kt-indicator",
-                                          "on"
+                                          'data-kt-indicator',
+                                          'on'
                                         );
 
                                       setTimeout(async () => {
@@ -253,7 +253,7 @@ export function TopicPage() {
                                               `question-${question.id}`
                                             )
                                             ?.removeAttribute(
-                                              "data-kt-indicator"
+                                              'data-kt-indicator'
                                             );
 
                                           document
@@ -261,21 +261,23 @@ export function TopicPage() {
                                               `question-${question.id}`
                                             )
                                             ?.setAttribute(
-                                              "title",
-                                              "Essa pergunta não está disponível para você responder"
+                                              'title',
+                                              'Essa pergunta não está disponível para você responder'
                                             );
 
                                           document
                                             .getElementById(
                                               `question-${question.id}`
                                             )
-                                            ?.setAttribute("hidden", "true");
+                                            ?.setAttribute('hidden', 'true');
                                         }, 3000);
                                       });
                                     }
                                   }}
                                 >
-                                  <span className="indicator-label"></span>
+                                  <span className="indicator-label">
+                                    Responder{` `}
+                                  </span>
                                   <span className="indicator-progress">
                                     Aguarde...
                                     <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
@@ -288,12 +290,12 @@ export function TopicPage() {
                                 <>
                                   <span>
                                     {question.correctly ? (
-                                      "✔️ Resposta Correta"
+                                      '✔️ Resposta Correta'
                                     ) : (
                                       <>
                                         <p>Resposta Incorreta ❌</p>
                                         <p>
-                                          Resposta Correta:{" "}
+                                          Resposta Correta:{' '}
                                           {question.correct_option}
                                         </p>
                                         <p>{getCorrectAnswerText(question)}</p>
@@ -302,7 +304,7 @@ export function TopicPage() {
                                   </span>
                                 </>
                               ) : null}
-                              {user.type === "teacher" && (
+                              {user.type === 'teacher' && (
                                 <button
                                   type="button"
                                   className="btn btn-active-danger "
@@ -320,7 +322,7 @@ export function TopicPage() {
                       );
                     })
                   : null}
-                {user?.type === "teacher" ? (
+                {user?.type === 'teacher' ? (
                   <div className="col-lg-4">
                     <div className="card card-custom card-stretch-100 shadow mb-5">
                       <div className="card-header">
@@ -362,21 +364,21 @@ export function TopicPage() {
             </div>
             <div className="modal-body">
               <textarea
-                {...formik.getFieldProps("question_text")}
+                {...formik.getFieldProps('question_text')}
                 className={
                   clsx(
-                    "form-control form-control-lg form-control-solid",
+                    'form-control form-control-lg form-control-solid',
                     {
-                      "is-invalid":
+                      'is-invalid':
                         formik.touched.question_text &&
                         formik.errors.question_text,
                     },
                     {
-                      "is-valid":
+                      'is-valid':
                         formik.touched.question_text &&
                         !formik.errors.question_text,
                     }
-                  ) + "form-control form-control-flush"
+                  ) + 'form-control form-control-flush'
                 }
                 placeholder="Texto da questão"
               />
@@ -400,21 +402,21 @@ export function TopicPage() {
                     <td>
                       <input
                         type="text"
-                        {...formik.getFieldProps("option_a")}
+                        {...formik.getFieldProps('option_a')}
                         className={
                           clsx(
-                            "form-control form-control-lg form-control-solid",
+                            'form-control form-control-lg form-control-solid',
                             {
-                              "is-invalid":
+                              'is-invalid':
                                 formik.touched.option_a &&
                                 formik.errors.option_a,
                             },
                             {
-                              "is-valid":
+                              'is-valid':
                                 formik.touched.option_a &&
                                 !formik.errors.option_a,
                             }
-                          ) + "form-control form-control-flush"
+                          ) + 'form-control form-control-flush'
                         }
                         placeholder="Opção A"
                       />
@@ -451,21 +453,21 @@ export function TopicPage() {
                     <td>
                       <input
                         type="text"
-                        {...formik.getFieldProps("option_b")}
+                        {...formik.getFieldProps('option_b')}
                         className={
                           clsx(
-                            "form-control form-control-lg form-control-solid",
+                            'form-control form-control-lg form-control-solid',
                             {
-                              "is-invalid":
+                              'is-invalid':
                                 formik.touched.option_b &&
                                 formik.errors.option_b,
                             },
                             {
-                              "is-valid":
+                              'is-valid':
                                 formik.touched.option_b &&
                                 !formik.errors.option_b,
                             }
-                          ) + "form-control form-control-flush"
+                          ) + 'form-control form-control-flush'
                         }
                         placeholder="Opção B"
                       />
@@ -502,21 +504,21 @@ export function TopicPage() {
                     <td>
                       <input
                         type="text"
-                        {...formik.getFieldProps("option_c")}
+                        {...formik.getFieldProps('option_c')}
                         className={
                           clsx(
-                            "form-control form-control-lg form-control-solid",
+                            'form-control form-control-lg form-control-solid',
                             {
-                              "is-invalid":
+                              'is-invalid':
                                 formik.touched.option_c &&
                                 formik.errors.option_c,
                             },
                             {
-                              "is-valid":
+                              'is-valid':
                                 formik.touched.option_c &&
                                 !formik.errors.option_c,
                             }
-                          ) + "form-control form-control-flush"
+                          ) + 'form-control form-control-flush'
                         }
                         placeholder="Opção C"
                       />
@@ -553,21 +555,21 @@ export function TopicPage() {
                     <td>
                       <input
                         type="text"
-                        {...formik.getFieldProps("option_d")}
+                        {...formik.getFieldProps('option_d')}
                         className={
                           clsx(
-                            "form-control form-control-lg form-control-solid",
+                            'form-control form-control-lg form-control-solid',
                             {
-                              "is-invalid":
+                              'is-invalid':
                                 formik.touched.option_d &&
                                 formik.errors.option_d,
                             },
                             {
-                              "is-valid":
+                              'is-valid':
                                 formik.touched.option_d &&
                                 !formik.errors.option_d,
                             }
-                          ) + "form-control form-control-flush"
+                          ) + 'form-control form-control-flush'
                         }
                         placeholder="Opção D"
                       />
@@ -623,7 +625,7 @@ export function TopicPage() {
                 className="btn btn-primary"
                 onClick={handleNewQuestion}
                 disabled={
-                  formik.isSubmitting || !formik.isValid || correctAnswer === ""
+                  formik.isSubmitting || !formik.isValid || correctAnswer === ''
                 }
               >
                 Salvar
