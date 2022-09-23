@@ -1,47 +1,47 @@
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import {
   getQuestionById,
   updateQuestion,
-} from "../modules/auth/redux/QuestionCRUD";
-import { getTopic } from "../modules/auth/redux/TopicCRUD";
-import * as Yup from "yup";
-import { useFormik } from "formik";
-import clsx from "clsx";
-import { toAbsoluteUrl } from "../../_start/helpers";
-import { getAuthUserData } from "../../util/auth";
-import { submitAnswer } from "../modules/auth/redux/AnswerService";
+} from '../modules/auth/redux/QuestionCRUD';
+import { getTopic } from '../modules/auth/redux/TopicCRUD';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
+import clsx from 'clsx';
+import { toAbsoluteUrl } from '../../_start/helpers';
+import { getAuthUserData } from '../../util/auth';
+import { submitAnswer } from '../modules/auth/redux/AnswerService';
 
 const questionSchema = Yup.object()
   .shape({
     question_text: Yup.string()
-      .min(10, "Mínimo 10 caracteres")
-      .max(400, "Máximo de 400 caracteres")
-      .required("A introdução é obrigatória"),
+      .min(10, 'Mínimo 10 caracteres')
+      .max(400, 'Máximo de 400 caracteres')
+      .required('A introdução é obrigatória'),
     option_a: Yup.string()
-      .max(100, "Máximo de 100 caracteres")
-      .required("A opção A é obrigatória"),
+      .max(100, 'Máximo de 100 caracteres')
+      .required('A opção A é obrigatória'),
     option_b: Yup.string()
-      .max(100, "Máximo de 100 caracteres")
-      .required("A opção B é obrigatória"),
+      .max(100, 'Máximo de 100 caracteres')
+      .required('A opção B é obrigatória'),
     option_c: Yup.string()
-      .max(100, "Máximo de 100 caracteres")
-      .required("A opção C é obrigatória"),
+      .max(100, 'Máximo de 100 caracteres')
+      .required('A opção C é obrigatória'),
     option_d: Yup.string()
-      .max(100, "Máximo de 100 caracteres")
-      .required("A opção D é obrigatória"),
+      .max(100, 'Máximo de 100 caracteres')
+      .required('A opção D é obrigatória'),
     correct_option: Yup.string(),
   })
-  .required("A pergunta é obrigatória");
+  .required('A pergunta é obrigatória');
 
 const initialValues = {
-  question_text: "",
-  option_a: "",
-  option_b: "",
-  option_c: "",
-  option_d: "",
-  correct_option: "",
-  topic: "",
+  question_text: '',
+  option_a: '',
+  option_b: '',
+  option_c: '',
+  option_d: '',
+  correct_option: '',
+  topic: '',
 };
 
 export function QuestionPage() {
@@ -49,17 +49,17 @@ export function QuestionPage() {
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState(true);
   const [question, setQuestion]: any = useState();
-  const [correctOption, setCorrectOption] = useState("");
+  const [correctOption, setCorrectOption] = useState('');
   const [correctWasChanged, setCorrectWasChanged] = useState(false);
   const [topic, setTopic]: any = useState();
-  const [isStudent, setIsStudent] = useState(user?.type === "student");
-  const [isTeacher, setIsTeacher] = useState(user?.type === "teacher");
+  const [isStudent, setIsStudent] = useState(user?.type === 'student');
+  const [isTeacher, setIsTeacher] = useState(user?.type === 'teacher');
 
   const formik = useFormik({
     initialValues,
     validationSchema: questionSchema,
     onSubmit: (values, { setStatus, setSubmitting }) => {
-      if (correctOption !== "") {
+      if (correctOption !== '') {
         values.topic = id;
         values.correct_option = correctOption;
         setLoading(true);
@@ -72,11 +72,11 @@ export function QuestionPage() {
             .catch((error) => {
               setLoading(false);
               setSubmitting(false);
-              setStatus("Verificar o preenchimento dos campos");
+              setStatus('Verificar o preenchimento dos campos');
             });
         }, 1000);
       } else {
-        setStatus("Selecione uma resposta correta");
+        setStatus('Selecione uma resposta correta');
       }
     },
   });
@@ -139,7 +139,7 @@ export function QuestionPage() {
           <div>Loading...</div>
           <img
             alt="Logo"
-            src={toAbsoluteUrl("/media/rankme-logo/default.svg")}
+            src={toAbsoluteUrl('/media/rankme-logo/default.svg')}
             className="mh-100px"
           />
         </div>
@@ -149,7 +149,7 @@ export function QuestionPage() {
             <div className="col-lg-6">
               {topic ? (
                 <div>
-                  <Link to={"/topic/" + topic?.id}>
+                  <Link to={'/topic/' + topic?.id}>
                     <h1>{topic?.name}</h1>
                   </Link>
                   <p>{topic?.class?.name}</p>
@@ -162,22 +162,22 @@ export function QuestionPage() {
           <div className="mb-10">
             <label className="form-label">Texto da questão</label>
             <textarea
-              {...formik.getFieldProps("question_text")}
+              {...formik.getFieldProps('question_text')}
               value={formik.values.question_text}
               className={
                 clsx(
-                  "form-control form-control-lg form-control-solid",
+                  'form-control form-control-lg form-control-solid',
                   {
-                    "is-invalid":
+                    'is-invalid':
                       formik.touched.question_text &&
                       formik.errors.question_text,
                   },
                   {
-                    "is-valid":
+                    'is-valid':
                       formik.touched.question_text &&
                       !formik.errors.question_text,
                   }
-                ) + "form-control "
+                ) + 'form-control '
               }
               readOnly={isStudent}
               placeholder="Texto da questão"
@@ -198,8 +198,14 @@ export function QuestionPage() {
             </div>
           ) : null}
           <div>
-            <div className="row g-5">
-              <div className="col-lg-1">
+            <div
+              className="row g-5"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <div className="col-lg-1 col-md-1 col-sm-1 col-2">
                 <div className="mb-10">
                   <div className="form-check form-check-custom form-check-solid">
                     <input
@@ -209,7 +215,7 @@ export function QuestionPage() {
                       id="A"
                       name="flexRadioDefault"
                       onChange={() => {
-                        handleSelectedOption("A");
+                        handleSelectedOption('A');
                       }}
                     />
                     <label className="form-check-label" form="flexRadioDefault">
@@ -218,24 +224,24 @@ export function QuestionPage() {
                   </div>
                 </div>
               </div>
-              <div className="col-lg-11">
+              <div className="col-lg-11 col-md-11 col-sm-11 col-10">
                 <div className="mb-10">
                   {/* <label className="form-label">Default input</label> */}
                   <input
                     type="text"
-                    {...formik.getFieldProps("option_a")}
+                    {...formik.getFieldProps('option_a')}
                     className={
                       clsx(
-                        "form-control form-control-lg form-control-solid",
+                        'form-control form-control-lg form-control-solid',
                         {
-                          "is-invalid":
+                          'is-invalid':
                             formik.touched.option_a && formik.errors.option_a,
                         },
                         {
-                          "is-valid":
+                          'is-valid':
                             formik.touched.option_a && !formik.errors.option_a,
                         }
-                      ) + "form-control "
+                      ) + 'form-control '
                     }
                     placeholder="Opção A"
                     readOnly={isStudent}
@@ -250,8 +256,14 @@ export function QuestionPage() {
                 </div>
               </div>
             </div>
-            <div className="row g-5">
-              <div className="col-lg-1">
+            <div
+              className="row g-5"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <div className="col-lg-1 col-md-1 col-sm-1 col-2">
                 <div className="mb-10">
                   <div className="form-check form-check-custom form-check-solid">
                     <input
@@ -261,7 +273,7 @@ export function QuestionPage() {
                       id="B"
                       name="flexRadioDefault"
                       onChange={() => {
-                        handleSelectedOption("B");
+                        handleSelectedOption('B');
                       }}
                     />
                     <label className="form-check-label" form="flexRadioDefault">
@@ -270,24 +282,24 @@ export function QuestionPage() {
                   </div>
                 </div>
               </div>
-              <div className="col-lg-11">
+              <div className="col-lg-11 col-md-11 col-sm-11 col-10">
                 <div className="mb-10">
                   {/* <label className="form-label">Default input</label> */}
                   <input
                     type="text"
-                    {...formik.getFieldProps("option_b")}
+                    {...formik.getFieldProps('option_b')}
                     className={
                       clsx(
-                        "form-control form-control-lg form-control-solid",
+                        'form-control form-control-lg form-control-solid',
                         {
-                          "is-invalid":
+                          'is-invalid':
                             formik.touched.option_b && formik.errors.option_b,
                         },
                         {
-                          "is-valid":
+                          'is-valid':
                             formik.touched.option_b && !formik.errors.option_b,
                         }
-                      ) + "form-control "
+                      ) + 'form-control '
                     }
                     placeholder="Opção B"
                     readOnly={isStudent}
@@ -302,8 +314,14 @@ export function QuestionPage() {
                 </div>
               </div>
             </div>
-            <div className="row g-5">
-              <div className="col-lg-1">
+            <div
+              className="row g-5"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <div className="col-lg-1 col-md-1 col-sm-1 col-2">
                 <div className="mb-10">
                   <div className="form-check form-check-custom form-check-solid">
                     <input
@@ -313,7 +331,7 @@ export function QuestionPage() {
                       id="C"
                       name="flexRadioDefault"
                       onChange={() => {
-                        handleSelectedOption("C");
+                        handleSelectedOption('C');
                       }}
                     />
                     <label className="form-check-label" form="flexRadioDefault">
@@ -322,24 +340,24 @@ export function QuestionPage() {
                   </div>
                 </div>
               </div>
-              <div className="col-lg-11">
+              <div className="col-lg-11 col-md-11 col-sm-11 col-10">
                 <div className="mb-10">
                   {/* <label className="form-label">Default input</label> */}
                   <input
                     type="text"
-                    {...formik.getFieldProps("option_c")}
+                    {...formik.getFieldProps('option_c')}
                     className={
                       clsx(
-                        "form-control form-control-lg form-control-solid",
+                        'form-control form-control-lg form-control-solid',
                         {
-                          "is-invalid":
+                          'is-invalid':
                             formik.touched.option_c && formik.errors.option_c,
                         },
                         {
-                          "is-valid":
+                          'is-valid':
                             formik.touched.option_c && !formik.errors.option_c,
                         }
-                      ) + "form-control "
+                      ) + 'form-control '
                     }
                     placeholder="Opção C"
                     readOnly={isStudent}
@@ -354,8 +372,14 @@ export function QuestionPage() {
                 </div>
               </div>
             </div>
-            <div className="row g-5">
-              <div className="col-lg-1">
+            <div
+              className="row g-5"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <div className="col-lg-1 col-md-1 col-sm-1 col-2">
                 <div className="mb-10">
                   <div className="form-check form-check-custom form-check-solid">
                     <input
@@ -365,7 +389,7 @@ export function QuestionPage() {
                       id="D"
                       name="flexRadioDefault"
                       onChange={() => {
-                        handleSelectedOption("D");
+                        handleSelectedOption('D');
                       }}
                     />
                     <label className="form-check-label" form="flexRadioDefault">
@@ -374,23 +398,23 @@ export function QuestionPage() {
                   </div>
                 </div>
               </div>
-              <div className="col-lg-11">
+              <div className="col-lg-11 col-md-11 col-sm-11 col-10">
                 <div className="mb-10">
                   <input
                     type="text"
-                    {...formik.getFieldProps("option_d")}
+                    {...formik.getFieldProps('option_d')}
                     className={
                       clsx(
-                        "form-control form-control-lg form-control-solid",
+                        'form-control form-control-lg form-control-solid',
                         {
-                          "is-invalid":
+                          'is-invalid':
                             formik.touched.option_d && formik.errors.option_d,
                         },
                         {
-                          "is-valid":
+                          'is-valid':
                             formik.touched.option_d && !formik.errors.option_d,
                         }
-                      ) + "form-control "
+                      ) + 'form-control '
                     }
                     placeholder="Opção D"
                     readOnly={isStudent}
