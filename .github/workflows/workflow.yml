@@ -1,22 +1,38 @@
 name: Build and Deploy to GitHub Pages
 on:
   push:
-    branches: [main]
+    branches: 
+      - develop
 jobs:
-  build-push-gcr:
-    name: Build and Deploy
+  deploy:
+    name: "Deploy to production"
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Build
-        run: npm install --legacy-peer-deps
-
-      - name: Deploy
+      - name: Configure SSH
         run: |
-          git config --global user.name 'LeomaiaJr'
-          git config --global user.email 'leomaiajr@hotmail.com'
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}    
-          npm run deploy
+          echo $SSH_KEY
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/staging.key
+          chmod 600 ~/.ssh/staging.key
+          cat >>~/.ssh/config <<END
+          Host production
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/staging.key
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+
+      # - name: Stop the server
+      #   run: ssh production 'sudo systemctl stop my-application'
+
+      # - name: Check out the source
+      #   run: ssh production 'cd my-application && git fetch && git reset --hard origin/master'
+ 
+      - name: Start the server
+        if: ${{ always() }}
+        run: ssh production 'docker restart rankme-front'
